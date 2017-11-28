@@ -30,6 +30,10 @@ In order to run tests, perform the following:
 
 `rspec`
 
+## Schema
+![schema](https://content.screencast.com/users/dionew1/folders/Jing/media/233d0162-c68e-4e57-bb71-d728af70cf61/00000073.png)
+
+
 ## Contributers
 
 Anna Lewis (@anlewi5) Dione Wilson (@dionew1)

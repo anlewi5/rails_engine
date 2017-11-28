@@ -32,7 +32,14 @@ describe "Merchants API" do
     merchant = create(:merchant)
 
     get "/api/v1/merchants/find?id=#{merchant.id}"
-    binding.pry
+
+    merchant_response = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(merchant_response["id"]).to eq(merchant.id)
+    expect(merchant_response["name"]).to eq(merchant.name)
+    expect(merchant_response["created_at"]).to eq(merchant.created_at.to_json.delete('\\"'))
+    expect(merchant_response["updated_at"]).to eq(merchant.updated_at.to_json.delete('\\"'))
 
     get "/api/v1/merchants/find?name=#{merchant.name}"
 

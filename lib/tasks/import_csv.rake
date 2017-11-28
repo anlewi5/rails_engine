@@ -37,10 +37,10 @@ task :import_transactions, [:transactions] => :environment do
 end
 
 task :import_all do
-  import_transactions
-  import_merchants
-  import_items
-  import_invoices
-  import_customers
-  import_invoice_items
+  Rake::Task["import_transactions"].invoke
+  Rake::Task["import_merchants"].invoke
+  Rake::Task["import_items"].invoke
+  Rake::Task["import_invoices"].invoke
+  Rake::Task["import_customers"].invoke
+  Rake::Task["import_invoice_items"].invoke
 end

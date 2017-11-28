@@ -19,6 +19,8 @@ class Invoice < ApplicationRecord
         Invoice.find_by(created_at: params["created_at"].to_datetime)
       when params["updated_at"]
         Invoice.find_by(updated_at: params["updated_at"].to_datetime)
+      when params
+        Invoice.find_by(id: rand(Invoice.count))
     end
   end
 

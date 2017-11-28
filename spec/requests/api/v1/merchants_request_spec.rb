@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "Merchants API" do
-  it "lists all merchants" do
+  it "can list all merchants" do
     create_list(:merchant, 3)
 
     get "/api/v1/merchants"
@@ -27,5 +27,4 @@ describe "Merchants API" do
     expect(response).to be_success
     expect(merchant["id"]).to eq(id)
   end
-
 end

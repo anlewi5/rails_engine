@@ -27,4 +27,17 @@ describe "Merchants API" do
     expect(response).to be_success
     expect(merchant["id"]).to eq(id)
   end
+
+  it "can find a single merchant based on attributes" do
+    merchant = create(:merchant)
+
+    get "/api/v1/merchants/find?id=#{merchant.id}"
+    binding.pry
+
+    get "/api/v1/merchants/find?name=#{merchant.name}"
+
+    get "/api/v1/merchants/find?created_at=#{merchant.created_at}"
+
+    get "/api/v1/merchants/find?updated_at=#{merchant.updated_at}"
+  end
 end

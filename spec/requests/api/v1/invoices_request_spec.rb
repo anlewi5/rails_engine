@@ -21,4 +21,17 @@ describe "Invoice API" do
     expect(invoice).to have_key("customer_id")
     expect(invoice).to have_key("merchant_id")
   end
+
+  it "can show single invoice" do
+    customer = create(:customer)
+    merchant = create(:merchant)
+    id = create(:invoice, customer_id: customer.id, merchant_id: merchant.id).id
+
+    get "/api/v1/invoices/#{id}"
+
+    invoice = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(invoice["id"]).to eq(id)
+  end
 end

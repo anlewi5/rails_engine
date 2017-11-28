@@ -13,7 +13,8 @@ In order to run this appication in the development environment, perform the foll
 
 ```
 bundle install
-rake db:create db:migrate db:seed
+rake db:create db:migrate
+rake import_all
 ```
 
 In order to spin-up the server, run: `rails s`
@@ -31,7 +32,7 @@ In order to run tests, perform the following:
 
 ## Contributers
 
-Anna Lewis (@anlewi5)
+Anna Lewis (@anlewi5) Dione Wilson (@dionew1)
 
 
 ## Other things you may want to cover:

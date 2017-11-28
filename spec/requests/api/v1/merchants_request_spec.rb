@@ -28,7 +28,7 @@ describe "Merchants API" do
     expect(merchant["id"]).to eq(id)
   end
 
-  it "can find a single merchant based on attributes" do
+  it "can find a single merchant based on id" do
     merchant = create(:merchant)
 
     get "/api/v1/merchants/find?id=#{merchant.id}"
@@ -40,24 +40,42 @@ describe "Merchants API" do
     expect(merchant_response["name"]).to eq(merchant.name)
     expect(merchant_response["created_at"]).to eq(merchant.created_at.to_json.delete('\\"'))
     expect(merchant_response["updated_at"]).to eq(merchant.updated_at.to_json.delete('\\"'))
+  end
+
+  it "can find a single merchant based on name" do
+    merchant = create(:merchant)
 
     get "/api/v1/merchants/find?name=#{merchant.name}"
 
+    merchant_response = JSON.parse(response.body)
+
     expect(response).to be_success
     expect(merchant_response["id"]).to eq(merchant.id)
     expect(merchant_response["name"]).to eq(merchant.name)
     expect(merchant_response["created_at"]).to eq(merchant.created_at.to_json.delete('\\"'))
     expect(merchant_response["updated_at"]).to eq(merchant.updated_at.to_json.delete('\\"'))
+  end
+
+  it "can find a single merchant based on created_at" do
+    merchant = create(:merchant)
 
     get "/api/v1/merchants/find?created_at=#{merchant.created_at}"
 
+    merchant_response = JSON.parse(response.body)
+    binding.pry
     expect(response).to be_success
     expect(merchant_response["id"]).to eq(merchant.id)
     expect(merchant_response["name"]).to eq(merchant.name)
     expect(merchant_response["created_at"]).to eq(merchant.created_at.to_json.delete('\\"'))
     expect(merchant_response["updated_at"]).to eq(merchant.updated_at.to_json.delete('\\"'))
+  end
+
+  it "can find a single merchant based on updated_at" do
+    merchant = create(:merchant)
 
     get "/api/v1/merchants/find?updated_at=#{merchant.updated_at}"
+
+    merchant_response = JSON.parse(response.body)
 
     expect(response).to be_success
     expect(merchant_response["id"]).to eq(merchant.id)

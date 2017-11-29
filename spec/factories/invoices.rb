@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :invoice do
-    status "Paid"
+    sequence :status do
+      Faker::Color.color_name
+    end
   end
 end

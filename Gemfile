@@ -19,6 +19,8 @@ group :development, :test do
   gem 'pry'
   # RSpec
   gem 'rspec-rails'
+  # For test coverage
+  gem 'simplecov'
   #FactoryBot
   gem 'factory_bot_rails', '~> 4.0'
   #Shoulda

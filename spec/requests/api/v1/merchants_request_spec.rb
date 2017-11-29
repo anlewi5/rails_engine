@@ -100,7 +100,19 @@ describe "Merchants API" do
                             created_at: "2013-03-06T16:54:31",
                             updated_at: "2014-03-06T16:54:31"
                            )
-    end
+      end
+
+      shared_examples_for 'a response that finds merchants 2 and 3' do
+        it "finds the correct merchants" do
+          merchant_response = JSON.parse(response.body)
+
+          expect(response).to be_success
+          expect(merchant_response).to be_an(Array)
+          expect(merchant_response.count).to eq(2)
+          expect(merchant_response.map { |result| result['id'] })
+            .to contain_exactly 2, 3
+        end
+      end
 
       it "can find merchants based on id" do
         get "/api/v1/merchants/find_all?id=#{@merchant2.id}"
@@ -113,40 +125,19 @@ describe "Merchants API" do
         expect(merchant_response.first["id"]).to eq(@merchant2.id)
       end
 
-      it "can find merchants based on name" do
-        get "/api/v1/merchants/find_all?name=#{@merchant2.name}"
-
-        merchant_response = JSON.parse(response.body)
-
-        expect(response).to be_success
-        expect(merchant_response).to be_an(Array)
-        expect(merchant_response.count).to eq(2)
-        expect(merchant_response.map { |result| result['id'] })
-          .to contain_exactly 2, 3
+      context "finding merchants based on name" do
+        before { get "/api/v1/merchants/find_all?name=#{@merchant2.name}" }
+        it_behaves_like 'a response that finds merchants 2 and 3'
       end
 
-      it "can find merchants based on created_at" do
-        get "/api/v1/merchants/find_all?created_at=#{@merchant2.created_at}"
-
-        merchant_response = JSON.parse(response.body)
-
-        expect(response).to be_success
-        expect(merchant_response).to be_an(Array)
-        expect(merchant_response.count).to eq(2)
-        expect(merchant_response.map { |result| result['id'] })
-          .to contain_exactly 2, 3
+      context "finding merchants based on created_at" do
+        before { get "/api/v1/merchants/find_all?created_at=#{@merchant2.created_at}" }
+        it_behaves_like 'a response that finds merchants 2 and 3'
       end
 
-      it "can find merchants based on updated_at" do
-        get "/api/v1/merchants/find_all?updated_at=#{@merchant2.updated_at}"
-
-        merchant_response = JSON.parse(response.body)
-
-        expect(response).to be_success
-        expect(merchant_response).to be_an(Array)
-        expect(merchant_response.count).to eq(2)
-        expect(merchant_response.map { |result| result['id'] })
-          .to contain_exactly 2, 3
+      context "finding merchants based on updated_at" do
+        before { get "/api/v1/merchants/find_all?updated_at=#{@merchant2.updated_at}" }
+        it_behaves_like 'a response that finds merchants 2 and 3'
       end
     end
   end

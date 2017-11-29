@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "customers API" do
   describe "record endpoints" do
-    xit "can list all customers" do
+    it "can list all customers" do
       create_list(:customer, 3)
 
       get "/api/v1/customers"
@@ -13,7 +13,8 @@ describe "customers API" do
       expect(response).to be_success
       expect(customers.count).to eq(3)
       expect(customer).to have_key("id")
-      expect(customer).to have_key("name")
+      expect(customer).to have_key("first_name")
+      expect(customer).to have_key("last_name")
       expect(customer).not_to have_key("updated_at")
       expect(customer).not_to have_key("created_at")
     end
@@ -39,7 +40,8 @@ describe "customers API" do
 
       expect(response).to be_success
       expect(customer_response).to have_key("id")
-      expect(customer_response).to have_key("name")
+      expect(customer_response).to have_key("first_name")
+      expect(customer_response).to have_key("last_name")
     end
 
     describe "queries" do

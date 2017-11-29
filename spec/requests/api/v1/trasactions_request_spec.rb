@@ -23,7 +23,7 @@ describe "transactions API" do
       expect(transaction).not_to have_key("created_at")
     end
 
-    xit "can get single transaction by id" do
+    it "can get single transaction by id" do
       transaction = create(:transaction)
 
       get "/api/v1/transactions/#{transaction.id}"
@@ -36,7 +36,7 @@ describe "transactions API" do
       expect(transaction_response["result"]).to eq(transaction.result)
     end
 
-    xit "can find a random transaction" do
+    it "can find a random transaction" do
       create_list(:transaction, 3)
 
       get "/api/v1/transactions/random"
@@ -45,8 +45,8 @@ describe "transactions API" do
 
       expect(response).to be_success
       expect(transaction_response).to have_key("id")
-      expect(transaction).to have_key("invoice_id")
-      expect(transaction).to have_key("result")
+      expect(transaction_response).to have_key("invoice_id")
+      expect(transaction_response).to have_key("result")
     end
 
     describe "queries" do

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "transactions API" do
   describe "record endpoints" do
-    xit "can list all transactions" do
+    it "can list all transactions" do
       create_list(:transaction, 3)
 
       get "/api/v1/transactions"

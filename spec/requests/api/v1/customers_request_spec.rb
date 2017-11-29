@@ -52,18 +52,20 @@ describe "customers API" do
 
         before(:each) do
           create(:customer, id: 1,
-                            name: "customerName",
+                            first_name: "customerFirst",
+                            last_name:  "customerLast",
                             created_at: "2012-03-06T16:54:31",
                             updated_at: "2013-03-06T16:54:31"
           )
         end
 
         shared_examples_for "a response that finds a single customer" do
-          xit "finds the correct customer" do
+          it "finds the correct customer" do
             subject
             expect(response).to be_success
             expect(customer_response["id"]).to eq(1)
-            expect(customer_response["name"]).to eq("customerName")
+            expect(customer_response["first_name"]).to eq("customerFirst")
+            expect(customer_response["last_name"]).to eq("customerLast")
           end
         end
 
@@ -72,8 +74,13 @@ describe "customers API" do
           it_behaves_like "a response that finds a single customer"
         end
 
-        context "based on name" do
-          let(:params) { "name=customerName" }
+        context "based on first name" do
+          let(:params) { "first_name=customerFirst" }
+          it_behaves_like "a response that finds a single customer"
+        end
+
+        context "based on last name" do
+          let(:params) { "last_name=customerLast" }
           it_behaves_like "a response that finds a single customer"
         end
 

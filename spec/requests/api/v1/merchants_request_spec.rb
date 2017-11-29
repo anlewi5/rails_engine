@@ -32,8 +32,13 @@ describe "Merchants API" do
   describe "queries" do
     describe "find?" do
       before(:each) do
-        @merchant = create(:merchant)
+        @merchant = create(:merchant,
+                           name: "Dione",
+                           created_at: "2012-03-06T16:54:31",
+                           updated_at: "2013-03-06T16:54:31"
+                          )
       end
+
       it "can find a single merchant based on id" do
         get "/api/v1/merchants/find?id=#{@merchant.id}"
 
@@ -66,6 +71,54 @@ describe "Merchants API" do
 
       it "can find a single merchant based on updated_at" do
         get "/api/v1/merchants/find?updated_at=#{@merchant.updated_at}"
+
+        merchant_response = JSON.parse(response.body)
+
+        expect(response).to be_success
+        expect(merchant_response["id"]).to eq(@merchant.id)
+        expect(merchant_response["name"]).to eq(@merchant.name)
+      end
+    end
+
+    describe "find_all?" do
+      before(:each) do
+        @merchant1 = create(:merchant)
+        @merchant2 = create(:merchant)
+        @merchant3 = create(:merchant)
+      end
+
+      xit "can find merchants based on id" do
+        get "/api/v1/merchants/find_all?id=#{@merchant1.id}"
+
+        merchant_response = JSON.parse(response.body)
+
+        expect(response).to be_success
+        expect(merchant_response["id"]).to eq(@merchant1.id)
+        expect(merchant_response["name"]).to eq(@merchant1.name)
+      end
+
+      xit "can find merchants based on name" do
+        get "/api/v1/merchants/find_all?name=#{@merchant.name}"
+
+        merchant_response = JSON.parse(response.body)
+
+        expect(response).to be_success
+        expect(merchant_response["id"]).to eq(@merchant.id)
+        expect(merchant_response["name"]).to eq(@merchant.name)
+      end
+
+      xit "can find merchants based on created_at" do
+        get "/api/v1/merchants/find_all?created_at=#{@merchant.created_at}"
+
+        merchant_response = JSON.parse(response.body)
+
+        expect(response).to be_success
+        expect(merchant_response["id"]).to eq(@merchant.id)
+        expect(merchant_response["name"]).to eq(@merchant.name)
+      end
+
+      xit "can find merchants based on updated_at" do
+        get "/api/v1/merchants/find_all?updated_at=#{@merchant.updated_at}"
 
         merchant_response = JSON.parse(response.body)
 

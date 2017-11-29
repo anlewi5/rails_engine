@@ -2,16 +2,16 @@ require 'rails_helper'
 
 describe "Items API" do
   it "can list all items" do
-    merchant = create!(:merchant)
-    create_list(:items, 4, merchant_id: merchant.id)
+    merchant = create(:merchant)
+    create_list(:item, 4, merchant_id: merchant.id)
 
-    get "api/v1/items"
+    get "/api/v1/items"
 
     items = JSON.parse(response.body)
     item = items.first
 
     expect(response).to be_success
-    epect(items.count).to eq 4
+    expect(items.count).to eq 4
     expect(item).to have_key("id")
     expect(item).to have_key("name")
     expect(item).to have_key("description")

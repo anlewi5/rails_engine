@@ -19,7 +19,7 @@ describe "customers API" do
       expect(customer).not_to have_key("created_at")
     end
 
-    xit "can get single customer by id" do
+    it "can get single customer by id" do
       customer = create(:customer)
 
       get "/api/v1/customers/#{customer.id}"
@@ -28,7 +28,8 @@ describe "customers API" do
 
       expect(response).to be_success
       expect(customer_response["id"]).to eq(customer.id)
-      expect(customer_response["name"]).to eq(customer.name)
+      expect(customer_response["first_name"]).to eq(customer.first_name)
+      expect(customer_response["last_name"]).to eq(customer.last_name)
     end
 
     xit "can find a random customer" do

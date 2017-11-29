@@ -1,6 +1,6 @@
 # Rails Engine
 
-[![CircleCI Sheild](https://circleci.com/gh/:owner/:repo.svg?style=shield&circle-token=:circle-token)
+[![CircleCI](https://circleci.com/gh/anlewi5/rails_engine/tree/master.svg?style=shield)](https://circleci.com/gh/anlewi5/rails_engine/tree/master)
 
 ## About
 

@@ -13,8 +13,8 @@ describe "Merchants API" do
     expect(merchants.count).to eq(3)
     expect(merchant).to have_key("id")
     expect(merchant).to have_key("name")
-    expect(merchant).to have_key("updated_at")
-    expect(merchant).to have_key("created_at")
+    expect(merchant).not_to have_key("updated_at")
+    expect(merchant).not_to have_key("created_at")
   end
 
   it "can get single merchant by id" do

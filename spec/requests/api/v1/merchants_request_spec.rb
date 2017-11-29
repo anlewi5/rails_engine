@@ -135,4 +135,22 @@ describe "Merchants API" do
       end
     end
   end
+  describe "business intelligence" do
+    it "returns the total revenue for single merchant" do
+      merchant = create(:merchant)
+      invoice1 = create(:invoice, merchant_id: merchant.id)
+      invoice2 = create(:invoice, merchant_id: merchant.id)
+      invoice_item1 = create(:invoice_item, invoice_id: invoice1.id, quantity: 2,
+                            price: 5)
+      invoice_item2 = create(:invoice_item, invoice_id: invoice2.id, quantity: 3,
+                            price: 4)
+
+      get "/api/v1/merchants/#{merchant.id}/revenue"
+
+      merchant_response = JSON.parse(response.body)
+
+      expect(response).to be_success
+      expect(merchant.response["total_revenue"]).to eq 22
+    end
+  end
 end

@@ -31,4 +31,14 @@ class Merchant < ApplicationRecord
         Merchant.where(updated_at: params["updated_at"].to_datetime)
     end
   end
+
+  def self.single_merchant_revenue(merchant_id)
+    select("merchants.id, sum(invoice_items.quantity * invoice_items.unit_price) as revenue")
+    .joins(invoices: [:transactions, :invoice_items])
+    .group("merchants.id")
+    .having("merchants.id = ?", merchant_id)
+    .merge(Transaction.unscoped.successful)
+    .first
+    .revenue
+  end
 end

@@ -1,0 +1,173 @@
+require 'rails_helper'
+
+describe "transactions API" do
+  describe "record endpoints" do
+    xit "can list all transactions" do
+      create_list(:transaction, 3)
+
+      get "/api/v1/transactions"
+
+      transactions = JSON.parse(response.body)
+      transaction = transactions.first
+
+      expect(response).to be_success
+
+      expect(transactions.count).to eq(3)
+      expect(transaction).to have_key("id")
+      expect(transaction).to have_key("invoice_id")
+      expect(transaction).to have_key("result")
+
+      expect(transaction).not_to have_key("credit_card_number")
+      expect(transaction).not_to have_key("credit_card_expiration_date")
+      expect(transaction).not_to have_key("updated_at")
+      expect(transaction).not_to have_key("created_at")
+    end
+
+    xit "can get single transaction by id" do
+      transaction = create(:transaction)
+
+      get "/api/v1/transactions/#{transaction.id}"
+
+      transaction_response = JSON.parse(response.body)
+
+      expect(response).to be_success
+      expect(transaction_response["id"]).to eq(transaction.id)
+      expect(transaction_response["invoice_id"]).to eq(transaction.invoice_id)
+      expect(transaction_response["result"]).to eq(transaction.result)
+    end
+
+    xit "can find a random transaction" do
+      create_list(:transaction, 3)
+
+      get "/api/v1/transactions/random"
+
+      transaction_response = JSON.parse(response.body)
+
+      expect(response).to be_success
+      expect(transaction_response).to have_key("id")
+      expect(transaction).to have_key("invoice_id")
+      expect(transaction).to have_key("result")
+    end
+
+    describe "queries" do
+      describe "find?" do
+        subject { get "/api/v1/transactions/find?#{params}" }
+        let(:transaction_response) { JSON.parse(response.body) }
+
+        before(:each) do
+          create(:transaction, id: 1,
+                            invoice_id: 1,
+                            credit_card_number: 1,
+                            credit_card_expiration_date: 1,
+                            result: 1,
+                            created_at: "2012-03-06T16:54:31",
+                            updated_at: "2013-03-06T16:54:31"
+          )
+        end
+
+        shared_examples_for "a response that finds a single transaction" do
+          xit "finds the correct transaction" do
+            subject
+            expect(response).to be_success
+            expect(transaction_response["id"]).to eq(1)
+            expect(transaction_response["invoice_id"]).to eq(1)
+            expect(transaction_response["result"]).to eq(1)
+          end
+        end
+
+        context "based on id" do
+          let(:params) { "id=1" }
+          it_behaves_like "a response that finds a single transaction"
+        end
+
+        context "based on invoice_id" do
+          let(:params) { "invoice_id=1" }
+          it_behaves_like "a response that finds a single transaction"
+        end
+
+        context "based on credit_card_number" do
+          let(:params) { "credit_card_number=1" }
+          it_behaves_like "a response that finds a single transaction"
+        end
+
+        context "based on credit_card_expiration_date" do
+          let(:params) { "credit_card_expiration_date=1" }
+          it_behaves_like "a response that finds a single transaction"
+        end
+
+        context "based on result" do
+          let(:params) { "result=1" }
+          it_behaves_like "a response that finds a single transaction"
+        end
+
+        context "based on created_at" do
+          let(:params) { "created_at=2012-03-06T16:54:31" }
+          it_behaves_like "a response that finds a single transaction"
+        end
+
+        context "based on updated_at" do
+          let(:params) { "updated_at=2013-03-06T16:54:31" }
+          it_behaves_like "a response that finds a single transaction"
+        end
+      end
+
+      describe "find_all?" do
+        subject { get "/api/v1/transactions/find_all?#{params}" }
+        let(:transaction_response) { JSON.parse(response.body) }
+
+        before do
+          create :transaction, id: 1,
+                              invoice_id: 2,
+                              credit_card_number: 2,
+                              credit_card_expiration_date: 2,
+                              result: 2,
+                              created_at: "2013-03-06T16:54:31",
+                              updated_at: "2014-03-06T16:54:31"
+          create :transaction, id: 2,
+                              invoice_id: 1,
+                              credit_card_number: 1,
+                              credit_card_expiration_date: 1,
+                              result: 1,
+                              created_at: "2012-03-06T16:54:31",
+                              updated_at: "2013-03-06T16:54:31"
+          create :transaction, id: 3,
+                              invoice_id: 1,
+                              credit_card_number: 1,
+                              credit_card_expiration_date: 1,
+                              result: 1,
+                              created_at: "2012-03-06T16:54:31",
+                              updated_at: "2013-03-06T16:54:31"
+        end
+
+        shared_examples_for 'a response that finds transactions' do |*transaction_ids|
+          xit "finds the correct transactions" do
+            subject
+            expect(response).to be_success
+            expect(transaction_response).to be_an Array
+            expect(transaction_response.map { |result| result['id'] }).to contain_exactly(*transaction_ids)
+          end
+        end
+
+        context 'based on id' do
+          let(:params) { "id=2" }
+          it_behaves_like 'a response that finds transactions', 2
+        end
+
+        context "based on name" do
+          let(:params) { "name=Sametransaction" }
+          it_behaves_like 'a response that finds transactions', 2, 3
+        end
+
+        context "based on created_at" do
+          let(:params) { "created_at=2013-03-06T16:54:31" }
+          it_behaves_like 'a response that finds transactions', 2, 3
+        end
+
+        context "based on updated_at" do
+          let(:params) { "updated_at=2014-03-06T16:54:31" }
+          it_behaves_like 'a response that finds transactions', 2, 3
+        end
+      end
+    end
+  end
+end

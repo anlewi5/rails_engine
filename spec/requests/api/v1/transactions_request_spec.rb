@@ -55,23 +55,24 @@ describe "transactions API" do
         let(:transaction_response) { JSON.parse(response.body) }
 
         before(:each) do
+          @invoice_id = create(:invoice).id
           create(:transaction, id: 1,
-                            invoice_id: 1,
-                            credit_card_number: 1,
-                            credit_card_expiration_date: 1,
-                            result: 1,
+                            invoice_id: @invoice_id,
+                            credit_card_number: 12345,
+                            credit_card_expiration_date: "2012-03",
+                            result: "success",
                             created_at: "2012-03-06T16:54:31",
                             updated_at: "2013-03-06T16:54:31"
           )
         end
 
         shared_examples_for "a response that finds a single transaction" do
-          xit "finds the correct transaction" do
+          it "finds the correct transaction" do
             subject
             expect(response).to be_success
             expect(transaction_response["id"]).to eq(1)
-            expect(transaction_response["invoice_id"]).to eq(1)
-            expect(transaction_response["result"]).to eq(1)
+            expect(transaction_response["invoice_id"]).to eq(@invoice_id)
+            expect(transaction_response["result"]).to eq("success")
           end
         end
 
@@ -81,22 +82,22 @@ describe "transactions API" do
         end
 
         context "based on invoice_id" do
-          let(:params) { "invoice_id=1" }
+          let(:params) { "invoice_id=#{@invoice_id}" }
           it_behaves_like "a response that finds a single transaction"
         end
 
         context "based on credit_card_number" do
-          let(:params) { "credit_card_number=1" }
+          let(:params) { "credit_card_number=12345" }
           it_behaves_like "a response that finds a single transaction"
         end
 
         context "based on credit_card_expiration_date" do
-          let(:params) { "credit_card_expiration_date=1" }
+          let(:params) { "credit_card_expiration_date=2012-03" }
           it_behaves_like "a response that finds a single transaction"
         end
 
         context "based on result" do
-          let(:params) { "result=1" }
+          let(:params) { "result=success" }
           it_behaves_like "a response that finds a single transaction"
         end
 

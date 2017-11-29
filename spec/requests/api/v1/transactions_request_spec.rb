@@ -117,31 +117,33 @@ describe "transactions API" do
         let(:transaction_response) { JSON.parse(response.body) }
 
         before do
+          @invoice_id_1 = create(:invoice).id
+          @invoice_id_2 = create(:invoice).id
           create :transaction, id: 1,
-                              invoice_id: 2,
-                              credit_card_number: 2,
-                              credit_card_expiration_date: 2,
-                              result: 2,
+                              invoice_id: @invoice_id_1,
+                              credit_card_number: 54321,
+                              credit_card_expiration_date: "2013-03",
+                              result: "success",
                               created_at: "2013-03-06T16:54:31",
                               updated_at: "2014-03-06T16:54:31"
           create :transaction, id: 2,
-                              invoice_id: 1,
-                              credit_card_number: 1,
-                              credit_card_expiration_date: 1,
-                              result: 1,
+                              invoice_id: @invoice_id_2,
+                              credit_card_number: 12345,
+                              credit_card_expiration_date: "2012-03",
+                              result: "failed",
                               created_at: "2012-03-06T16:54:31",
                               updated_at: "2013-03-06T16:54:31"
           create :transaction, id: 3,
-                              invoice_id: 1,
-                              credit_card_number: 1,
-                              credit_card_expiration_date: 1,
-                              result: 1,
+                              invoice_id: @invoice_id_2,
+                              credit_card_number: 12345,
+                              credit_card_expiration_date: "2012-03",
+                              result: "failed",
                               created_at: "2012-03-06T16:54:31",
                               updated_at: "2013-03-06T16:54:31"
         end
 
         shared_examples_for 'a response that finds transactions' do |*transaction_ids|
-          xit "finds the correct transactions" do
+          it "finds the correct transactions" do
             subject
             expect(response).to be_success
             expect(transaction_response).to be_an Array
@@ -154,18 +156,33 @@ describe "transactions API" do
           it_behaves_like 'a response that finds transactions', 2
         end
 
-        context "based on name" do
-          let(:params) { "name=Sametransaction" }
+        context "based on invoice_id" do
+          let(:params) { "invoice_id=#{@invoice_id_2}" }
+          it_behaves_like 'a response that finds transactions', 2, 3
+        end
+
+        context "based on credit_card_number" do
+          let(:params) { "credit_card_number=12345" }
+          it_behaves_like 'a response that finds transactions', 2, 3
+        end
+
+        context "based on credit_card_expiration_date" do
+          let(:params) { "credit_card_expiration_date=2012-03" }
+          it_behaves_like 'a response that finds transactions', 2, 3
+        end
+
+        context "based on result" do
+          let(:params) { "result=failed" }
           it_behaves_like 'a response that finds transactions', 2, 3
         end
 
         context "based on created_at" do
-          let(:params) { "created_at=2013-03-06T16:54:31" }
+          let(:params) { "created_at=2012-03-06T16:54:31" }
           it_behaves_like 'a response that finds transactions', 2, 3
         end
 
         context "based on updated_at" do
-          let(:params) { "updated_at=2014-03-06T16:54:31" }
+          let(:params) { "updated_at=2013-03-06T16:54:31" }
           it_behaves_like 'a response that finds transactions', 2, 3
         end
       end

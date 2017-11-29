@@ -32,7 +32,7 @@ describe "customers API" do
       expect(customer_response["last_name"]).to eq(customer.last_name)
     end
 
-    xit "can find a random customer" do
+    it "can find a random customer" do
       create_list(:customer, 3)
 
       get "/api/v1/customers/random"

@@ -109,54 +109,83 @@ describe "Invoice find, find all, and random" do
     get "/api/v1/invoices/find_all?id=#{@invoice2.id}"
 
     invoice_response = JSON.parse(response.body)
+    invoice = invoice_response.first
 
     expect(response).to be_success
-    expect(invoice_response.count).to eq(1)
+    expect(invoice["id"]).to eq (2)
+    expect(invoice["status"]).to eq("shipped")
+    expect(invoice["customer_id"]).to eq(@customer.id)
+    expect(invoice["merchant_id"]).to eq(@merchant.id)
   end
 
   it "can find_all invoice by status" do
     get "/api/v1/invoices/find_all?status=shipped"
 
     invoice_response = JSON.parse(response.body)
+    invoice = invoice_response.first
 
     expect(response).to be_success
     expect(invoice_response.count).to eq(2)
+    expect(invoice["id"]).to eq (1)
+    expect(invoice["status"]).to eq("shipped")
+    expect(invoice["customer_id"]).to eq(@customer.id)
+    expect(invoice["merchant_id"]).to eq(@merchant.id)
   end
 
   it "can find_all invoice by customer_id" do
     get "/api/v1/invoices/find_all?customer_id=#{@customer.id}"
 
     invoice_response = JSON.parse(response.body)
+    invoice = invoice_response.first
 
     expect(response).to be_success
     expect(invoice_response.count).to eq(2)
+    expect(invoice["id"]).to eq (1)
+    expect(invoice["status"]).to eq("shipped")
+    expect(invoice["customer_id"]).to eq(@customer.id)
+    expect(invoice["merchant_id"]).to eq(@merchant.id)
   end
 
   it "can find_all invoice by merchant_id" do
     get "/api/v1/invoices/find_all?merchant_id=#{@merchant.id}"
 
     invoice_response = JSON.parse(response.body)
+    invoice = invoice_response.first
 
     expect(response).to be_success
     expect(invoice_response.count).to eq(2)
+    expect(invoice["id"]).to eq (1)
+    expect(invoice["status"]).to eq("shipped")
+    expect(invoice["customer_id"]).to eq(@customer.id)
+    expect(invoice["merchant_id"]).to eq(@merchant.id)
   end
 
   it "can find_all invoice by created_at" do
     get "/api/v1/invoices/find_all?created_at=#{@invoice.created_at}"
 
     invoice_response = JSON.parse(response.body)
+    invoice = invoice_response.first
 
     expect(response).to be_success
     expect(invoice_response.count).to eq(2)
+    expect(invoice["id"]).to eq (1)
+    expect(invoice["status"]).to eq("shipped")
+    expect(invoice["customer_id"]).to eq(@customer.id)
+    expect(invoice["merchant_id"]).to eq(@merchant.id)
   end
 
   it "can find_all invoice by updated_at" do
     get "/api/v1/invoices/find_all?updated_at=#{@invoice.updated_at}"
 
     invoice_response = JSON.parse(response.body)
+    invoice = invoice_response.first
 
     expect(response).to be_success
     expect(invoice_response.count).to eq(2)
+    expect(invoice["id"]).to eq (1)
+    expect(invoice["status"]).to eq("shipped")
+    expect(invoice["customer_id"]).to eq(@customer.id)
+    expect(invoice["merchant_id"]).to eq(@merchant.id)
   end
 
   it "can find a random invoice" do
@@ -165,6 +194,9 @@ describe "Invoice find, find all, and random" do
     invoice_response = JSON.parse(response.body)
 
     expect(response).to be_success
-    expect(invoice_response).to_not be_empty
+    expect(invoice_response).to have_key("id")
+    expect(invoice_response).to have_key("status")
+    expect(invoice_response).to have_key("customer_id")
+    expect(invoice_response).to have_key("merchant_id")
   end
 end

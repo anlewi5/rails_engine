@@ -31,52 +31,44 @@ describe "Merchants API" do
 
   describe "queries" do
     describe "find?" do
+      subject { get "/api/v1/merchants/find?#{params}" }
+      let(:merchant_response) { JSON.parse(response.body) }
+
       before(:each) do
-        @merchant = create(:merchant,
-                           name: "MerchantName",
-                           created_at: "2012-03-06T16:54:31",
-                           updated_at: "2013-03-06T16:54:31"
-                          )
+        create(:merchant, id: 1,
+                          name: "MerchantName",
+                          created_at: "2012-03-06T16:54:31",
+                          updated_at: "2013-03-06T16:54:31"
+        )
       end
 
-      it "can find a single merchant based on id" do
-        get "/api/v1/merchants/find?id=#{@merchant.id}"
-
-        merchant_response = JSON.parse(response.body)
-
-        expect(response).to be_success
-        expect(merchant_response["id"]).to eq(@merchant.id)
-        expect(merchant_response["name"]).to eq(@merchant.name)
+      shared_examples_for "a response that finds a single merchant" do
+        it "finds the correct merchant" do
+          subject
+          expect(response).to be_success
+          expect(merchant_response["id"]).to eq(1)
+          expect(merchant_response["name"]).to eq("MerchantName")
+        end
       end
 
-      it "can find a single merchant based on name" do
-        get "/api/v1/merchants/find?name=#{@merchant.name}"
-
-        merchant_response = JSON.parse(response.body)
-
-        expect(response).to be_success
-        expect(merchant_response["id"]).to eq(@merchant.id)
-        expect(merchant_response["name"]).to eq(@merchant.name)
+      context "based on id" do
+        let(:params) { "id=1" }
+        it_behaves_like "a response that finds a single merchant"
       end
 
-      it "can find a single merchant based on created_at" do
-        get "/api/v1/merchants/find?created_at=#{@merchant.created_at}"
-
-        merchant_response = JSON.parse(response.body)
-
-        expect(response).to be_success
-        expect(merchant_response["id"]).to eq(@merchant.id)
-        expect(merchant_response["name"]).to eq(@merchant.name)
+      context "based on name" do
+        let(:params) { "name=MerchantName" }
+        it_behaves_like "a response that finds a single merchant"
       end
 
-      it "can find a single merchant based on updated_at" do
-        get "/api/v1/merchants/find?updated_at=#{@merchant.updated_at}"
+      context "based on created_at" do
+        let(:params) { "created_at=2012-03-06T16:54:31" }
+        it_behaves_like "a response that finds a single merchant"
+      end
 
-        merchant_response = JSON.parse(response.body)
-
-        expect(response).to be_success
-        expect(merchant_response["id"]).to eq(@merchant.id)
-        expect(merchant_response["name"]).to eq(@merchant.name)
+      context "based on updated_at" do
+        let(:params) { "updated_at=2013-03-06T16:54:31" }
+        it_behaves_like "a response that finds a single merchant"
       end
     end
 

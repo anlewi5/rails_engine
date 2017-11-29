@@ -16,7 +16,27 @@ describe "Items API" do
     expect(item).to have_key("name")
     expect(item).to have_key("description")
     expect(item).to have_key("unit_price")
-    # expect(invoice).not_to have_key("created_at")
-    # expect(invoice).not_to have_key("updated_at")
+    expect(item).to have_key("merchant_id")
+    expect(item).not_to have_key("created_at")
+    expect(item).not_to have_key("updated_at")
+  end
+
+  it "can list all items" do
+    merchant = create(:merchant)
+    items = create_list(:item, 4, merchant_id: merchant.id)
+
+    get "/api/v1/items/#{items.first.id}"
+
+    items_response = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(items_response["id"]).to eq 1
+    expect(items_response).to have_key("id")
+    expect(items_response).to have_key("name")
+    expect(items_response).to have_key("description")
+    expect(items_response).to have_key("unit_price")
+    expect(items_response).to have_key("merchant_id")
+    expect(items_response).not_to have_key("created_at")
+    expect(items_response).not_to have_key("updated_at")
   end
 end

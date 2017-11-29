@@ -1,5 +1,7 @@
 # Rails Engine
 
+[![CircleCI Sheild](https://circleci.com/gh/:owner/:repo.svg?style=shield&circle-token=:circle-token)
+
 ## About
 
 The purpose of this project is to use Rails and ActiveRecord to build a JSON API which exposes the [SalesEngine data schema](https://github.com/turingschool-examples/sales_engine/tree/master/data).

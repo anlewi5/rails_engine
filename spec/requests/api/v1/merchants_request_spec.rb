@@ -48,7 +48,7 @@ describe "Merchants API" do
     get "/api/v1/merchants/find?name=#{merchant.name}"
 
     merchant_response = JSON.parse(response.body)
-
+    binding.pry
     expect(response).to be_success
     expect(merchant_response["id"]).to eq(merchant.id)
     expect(merchant_response["name"]).to eq(merchant.name)

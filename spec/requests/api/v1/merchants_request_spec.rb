@@ -30,12 +30,15 @@ describe "Merchants API" do
   end
 
   it "can find a random merchant" do
+    create_list(:merchant, 3)
+
     get "/api/v1/merchants/random"
 
     merchant_response = JSON.parse(response.body)
 
     expect(response).to be_success
-    expect(merchant_response).to_not be_empty
+    expect(merchant_response).to have_key("id")
+    expect(merchant_response).to have_key("name")
   end
 
   describe "queries" do

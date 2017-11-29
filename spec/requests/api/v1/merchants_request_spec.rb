@@ -29,6 +29,15 @@ describe "Merchants API" do
     expect(merchant_response["name"]).to eq(merchant.name)
   end
 
+  it "can find a random merchant" do
+    get "/api/v1/merchants/random"
+
+    merchant_response = JSON.parse(response.body)
+
+    expect(response).to be_success
+    expect(merchant_response).to_not be_empty
+  end
+
   describe "queries" do
     describe "find?" do
       subject { get "/api/v1/merchants/find?#{params}" }

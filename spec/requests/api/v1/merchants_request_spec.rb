@@ -33,7 +33,7 @@ describe "Merchants API" do
     describe "find?" do
       before(:each) do
         @merchant = create(:merchant,
-                           name: "Dione",
+                           name: "MerchantName",
                            created_at: "2012-03-06T16:54:31",
                            updated_at: "2013-03-06T16:54:31"
                           )
@@ -82,49 +82,71 @@ describe "Merchants API" do
 
     describe "find_all?" do
       before(:each) do
-        @merchant1 = create(:merchant)
-        @merchant2 = create(:merchant)
-        @merchant3 = create(:merchant)
-      end
+        @merchant1 = create(:merchant,
+                            id: 1,
+                            name: "MerchantName1",
+                            created_at: "2014-03-06T16:54:31",
+                            updated_at: "2015-03-06T16:54:31"
+                           )
+        @merchant2 = create(:merchant,
+                            id: 2,
+                            name: "MerchantName2",
+                            created_at: "2013-03-06T16:54:31",
+                            updated_at: "2014-03-06T16:54:31"
+                           )
+        @merchant3 = create(:merchant,
+                            id: 3,
+                            name: "MerchantName2",
+                            created_at: "2013-03-06T16:54:31",
+                            updated_at: "2014-03-06T16:54:31"
+                           )
+    end
 
-      xit "can find merchants based on id" do
-        get "/api/v1/merchants/find_all?id=#{@merchant1.id}"
-
-        merchant_response = JSON.parse(response.body)
-
-        expect(response).to be_success
-        expect(merchant_response["id"]).to eq(@merchant1.id)
-        expect(merchant_response["name"]).to eq(@merchant1.name)
-      end
-
-      xit "can find merchants based on name" do
-        get "/api/v1/merchants/find_all?name=#{@merchant.name}"
-
-        merchant_response = JSON.parse(response.body)
-
-        expect(response).to be_success
-        expect(merchant_response["id"]).to eq(@merchant.id)
-        expect(merchant_response["name"]).to eq(@merchant.name)
-      end
-
-      xit "can find merchants based on created_at" do
-        get "/api/v1/merchants/find_all?created_at=#{@merchant.created_at}"
+      it "can find merchants based on id" do
+        get "/api/v1/merchants/find_all?id=#{@merchant2.id}"
 
         merchant_response = JSON.parse(response.body)
 
         expect(response).to be_success
-        expect(merchant_response["id"]).to eq(@merchant.id)
-        expect(merchant_response["name"]).to eq(@merchant.name)
+        expect(merchant_response).to be_an(Array)
+        expect(merchant_response.count).to eq(1)
+        expect(merchant_response.first["id"]).to eq(@merchant2.id)
       end
 
-      xit "can find merchants based on updated_at" do
-        get "/api/v1/merchants/find_all?updated_at=#{@merchant.updated_at}"
+      it "can find merchants based on name" do
+        get "/api/v1/merchants/find_all?name=#{@merchant2.name}"
 
         merchant_response = JSON.parse(response.body)
 
         expect(response).to be_success
-        expect(merchant_response["id"]).to eq(@merchant.id)
-        expect(merchant_response["name"]).to eq(@merchant.name)
+        expect(merchant_response).to be_an(Array)
+        expect(merchant_response.count).to eq(2)
+        expect(merchant_response.map { |result| result['id'] })
+          .to contain_exactly 2, 3
+      end
+
+      it "can find merchants based on created_at" do
+        get "/api/v1/merchants/find_all?created_at=#{@merchant2.created_at}"
+
+        merchant_response = JSON.parse(response.body)
+
+        expect(response).to be_success
+        expect(merchant_response).to be_an(Array)
+        expect(merchant_response.count).to eq(2)
+        expect(merchant_response.map { |result| result['id'] })
+          .to contain_exactly 2, 3
+      end
+
+      it "can find merchants based on updated_at" do
+        get "/api/v1/merchants/find_all?updated_at=#{@merchant2.updated_at}"
+
+        merchant_response = JSON.parse(response.body)
+
+        expect(response).to be_success
+        expect(merchant_response).to be_an(Array)
+        expect(merchant_response.count).to eq(2)
+        expect(merchant_response.map { |result| result['id'] })
+          .to contain_exactly 2, 3
       end
     end
   end

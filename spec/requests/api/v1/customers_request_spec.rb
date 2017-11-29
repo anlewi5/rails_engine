@@ -101,21 +101,24 @@ describe "customers API" do
 
         before do
           create :customer, id: 1,
-                            name: "Differentcustomer",
+                            first_name: "DifferentCustomerFirst",
+                            last_name:  "DifferentCustomerLast",
                             created_at: "2014-03-06T16:54:31",
                             updated_at: "2015-03-06T16:54:31"
           create :customer, id: 2,
-                            name: "Samecustomer",
+                            first_name: "SameCustomerFirst",
+                            last_name:  "SameCustomerLast",
                             created_at: "2013-03-06T16:54:31",
                             updated_at: "2014-03-06T16:54:31"
           create :customer, id: 3,
-                            name: "Samecustomer",
+                            first_name: "SameCustomerFirst",
+                            last_name:  "SameCustomerLast",
                             created_at: "2013-03-06T16:54:31",
                             updated_at: "2014-03-06T16:54:31"
         end
 
         shared_examples_for 'a response that finds customers' do |*customer_ids|
-          xit "finds the correct customers" do
+          it "finds the correct customers" do
             subject
             expect(response).to be_success
             expect(customer_response).to be_an Array
@@ -128,8 +131,13 @@ describe "customers API" do
           it_behaves_like 'a response that finds customers', 2
         end
 
-        context "based on name" do
-          let(:params) { "name=Samecustomer" }
+        context "based on first name" do
+          let(:params) { "first_name=SameCustomerFirst" }
+          it_behaves_like 'a response that finds customers', 2, 3
+        end
+
+        context "based on last name" do
+          let(:params) { "last_name=SameCustomerLast" }
           it_behaves_like 'a response that finds customers', 2, 3
         end
 

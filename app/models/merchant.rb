@@ -43,7 +43,7 @@ class Merchant < ApplicationRecord
   end
 
   def self.single_merchant_revenue_response(merchant_id)
-    money = '%.2f' % single_merchant_revenue(merchant_id) 
-    { total_revenue: money }
+    money = '%.2f' % single_merchant_revenue(merchant_id)
+    { revenue: money }
   end
 end

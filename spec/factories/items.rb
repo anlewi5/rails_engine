@@ -9,5 +9,6 @@ FactoryBot.define do
     sequence :unit_price do
       Faker::Commerce.price
     end
+    merchant
   end
 end

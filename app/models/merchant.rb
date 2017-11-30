@@ -1,6 +1,7 @@
 class Merchant < ApplicationRecord
   has_many :invoices
   has_many :items
+  has_many :customers, through: :invoices
 
   default_scope { order(:id) }
 
@@ -70,5 +71,16 @@ class Merchant < ApplicationRecord
   def self.merchant_revenue_by_invoice_date_response(merchant_id, invoice_date)
     money = (merchant_revenue_by_invoice_date(merchant_id, invoice_date) / 100.0).to_s
     { revenue: money }
+  end
+
+  def self.favorite_customer(merchant_id)
+    find(merchant_id)
+    .customers
+    .select('customers.*, count(transactions)')
+    .joins(invoices: :transactions)
+    .group('customers.id')
+    .order('count DESC')
+    .merge(Transaction.unscoped.successful)
+    .first
   end
 end

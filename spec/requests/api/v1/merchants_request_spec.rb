@@ -173,5 +173,26 @@ describe "Merchants API" do
       expect(response).to be_success
       expect(merchant_response["revenue"]).to eq "10.0"
     end
+
+    it 'returns favorite customer for merchant' do
+      merchant      = create(:merchant)
+      customer      = create(:customer)
+      customer2     = create(:customer)
+      invoice       = create(:invoice, merchant: merchant, customer: customer)
+      invoice2      = create(:invoice, merchant: merchant, customer: customer)
+      invoice3      = create(:invoice, merchant: merchant, customer: customer2)
+      transactions  = create(:transaction, invoice:invoice)
+      transactions2 = create(:transaction, invoice:invoice)
+      transactions3 = create(:transaction, invoice:invoice2)
+      transactions4 = create(:transaction, invoice:invoice3)
+
+      get "/api/v1/merchants/#{merchant.id}/favorite_customer"
+      
+      favorite_customer_response = JSON.parse(response.body)
+
+      expect(response).to be_success
+      expect(favorite_customer_response["first_name"]).to eq(customer.first_name)
+      expect(favorite_customer_response["last_name"]).to eq(customer.last_name)
+    end
   end
 end

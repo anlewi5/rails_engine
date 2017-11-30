@@ -141,9 +141,9 @@ describe "Merchants API" do
       invoice1 = create(:invoice, merchant_id: merchant.id)
       invoice2 = create(:invoice, merchant_id: merchant.id)
       invoice_item1 = create(:invoice_item, invoice_id: invoice1.id, quantity: 2,
-                            unit_price: 5)
+                            unit_price: 500)
       invoice_item2 = create(:invoice_item, invoice_id: invoice2.id, quantity: 3,
-                            unit_price: 4)
+                            unit_price: 400)
       transaction1 = create(:transaction, invoice_id: invoice1.id)
       transaction2 = create(:transaction, invoice_id: invoice2.id)
 
@@ -152,7 +152,7 @@ describe "Merchants API" do
       merchant_response = JSON.parse(response.body)
 
       expect(response).to be_success
-      expect(merchant_response["revenue"]).to eq "22.00"
+      expect(merchant_response["revenue"]).to eq "22.0"
     end
   end
 end

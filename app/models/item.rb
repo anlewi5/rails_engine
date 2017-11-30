@@ -12,9 +12,9 @@ class Item < ApplicationRecord
       when params["name"]
         Item.find_by(name: params["name"])
       when params["description"]
-        Item.find_by(description: params["description"].to_f * 100)
+        Item.find_by(description: params["description"])
       when params["unit_price"]
-        Item.find_by(invoice_id: params["unit_price"].to_i)
+        Item.find_by(unit_price: (params["unit_price"].to_f * 100).round(2))
       when params["merchant_id"]
         Item.find_by(merchant_id: params["merchant_id"].to_i)
       when params["created_at"]
@@ -33,9 +33,9 @@ class Item < ApplicationRecord
       when params["name"]
         Item.where(name: params["name"])
       when params["description"]
-        Item.where(description: params["description"].to_i)
+        Item.where(description: params["description"])
       when params["unit_price"]
-        Item.where(unit_price: params["unit_price"].to_f * 100)
+        Item.where(unit_price: (params["unit_price"].to_f * 100).round(2))
       when params["merchant_id"]
         Item.where(merchant_id: params["merchant_id"].to_i)
       when params["created_at"]

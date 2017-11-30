@@ -11,7 +11,7 @@ class InvoiceItem < ApplicationRecord
       when params["quantity"]
         InvoiceItem.find_by(quantity: params["quantity"])
       when params["unit_price"]
-        InvoiceItem.find_by(unit_price: params["unit_price"].to_f * 100)
+        InvoiceItem.find_by(unit_price: (params["unit_price"].to_f * 100).round(2))
       when params["invoice_id"]
         InvoiceItem.find_by(invoice_id: params["invoice_id"].to_i)
       when params["item_id"]
@@ -32,7 +32,7 @@ class InvoiceItem < ApplicationRecord
       when params["quantity"]
         InvoiceItem.where(quantity: params["quantity"])
       when params["unit_price"]
-        InvoiceItem.where(unit_price: params["unit_price"].to_f * 100)
+        InvoiceItem.where(unit_price: (params["unit_price"].to_f * 100).round(2))
       when params["invoice_id"]
         InvoiceItem.where(invoice_id: params["invoice_id"].to_i)
       when params["item_id"]

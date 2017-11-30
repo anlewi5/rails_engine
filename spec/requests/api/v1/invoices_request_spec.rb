@@ -201,7 +201,7 @@ describe "Invoice find, find all, and random" do
   end
 
   describe "relationship endpoints" do
-    subject { get "/api/v1/invoices/#{invoice.id}/#{relation}" }
+    subject { get "/api/v1/invoices/#{invoice_id}/#{relation}" }
     let(:invoice_response) { JSON.parse(response.body) }
 
     let(:customer)     { create(:customer) }
@@ -212,41 +212,47 @@ describe "Invoice find, find all, and random" do
     let(:transaction)  { create(:transaction, invoice: invoice) }
 
     shared_examples_for 'a response that finds x for an invoice' do
+      let(:invoice_id) { invoice.id }
+
       it "finds the correct x" do
         subject
         expect(response).to be_success
-        expect(invoice_response).to have_key :key
+        expect(invoice_response).to have_key("id")
       end
     end
 
-    context "where x is merchants" do
+    shared_examples_for 'a response that finds x-es for an invoice' do
+      let(:invoice_id) { invoice.id }
+
+      it "finds the correct x-es" do
+        subject
+        expect(response).to be_success
+      end
+    end
+
+    context "where x is merchant" do
       let(:relation) { "merchant" }
-      let(:key)      { "merchant" }
       it_behaves_like 'a response that finds x for an invoice'
     end
 
-    context "where x is customers" do
+    context "where x is customer" do
       let(:relation) { "customer" }
-      let(:key)      { "customer" }
       it_behaves_like 'a response that finds x for an invoice'
     end
 
     context "where x is transactions" do
       let(:relation) { "transactions" }
-      let(:key)      { "transactions" }
-      it_behaves_like 'a response that finds x for an invoice'
+      it_behaves_like 'a response that finds x-es for an invoice'
     end
 
     context "where x is items" do
       let(:relation) { "items" }
-      let(:key)      { "items" }
-      it_behaves_like 'a response that finds x for an invoice'
+      it_behaves_like 'a response that finds x-es for an invoice'
     end
 
     context "where x is invoice_items" do
       let(:relation) { "invoice_items" }
-      let(:key)      { "invoice_items" }
-      it_behaves_like 'a response that finds x for an invoice'
+      it_behaves_like 'a response that finds x-es for an invoice'
     end
   end
 end

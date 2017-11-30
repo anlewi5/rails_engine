@@ -36,7 +36,7 @@ describe "InvoiceItem API" do
       expect(response).to be_success
       expect(invoice_item_response["id"]).to eq(invoice_item.id)
       expect(invoice_item_response["quantity"]).to eq(invoice_item.quantity)
-      expect(invoice_item_response["unit_price"]).to eq(invoice_item.unit_price)
+      expect(invoice_item_response["unit_price"]).to eq((invoice_item.unit_price/100.0).to_s)
       expect(invoice_item_response["invoice_id"]).to eq(invoice.id)
       expect(invoice_item_response["item_id"]).to eq(item.id)
     end
@@ -87,17 +87,17 @@ describe "InvoiceItem API" do
 
       expect(response).to be_success
       expect(invoice_item_response["quantity"]).to eq(@invoice_item.quantity)
-      expect(invoice_item_response["unit_price"]).to eq(@invoice_item.unit_price)
+      expect(invoice_item_response["unit_price"]).to eq("3.0")
     end
 
     it "can find single invoice_item by unit_price" do
-      get "/api/v1/invoice_items/find?unit_price=#{@invoice_item.unit_price}"
+      get "/api/v1/invoice_items/find?unit_price=3.0"
 
       invoice_item_response = JSON.parse(response.body)
 
       expect(response).to be_success
       expect(invoice_item_response["quantity"]).to eq(@invoice_item.quantity)
-      expect(invoice_item_response["unit_price"]).to eq(@invoice_item.unit_price)
+      expect(invoice_item_response["unit_price"]).to eq("3.0")
     end
 
     it "can find single invoice item by item_id" do
@@ -126,7 +126,7 @@ describe "InvoiceItem API" do
       expect(response).to be_success
       expect(invoice_item_response["id"]).to eq(@invoice_item.id)
       expect(invoice_item_response["quantity"]).to eq(@invoice_item.quantity)
-      expect(invoice_item_response["unit_price"]).to eq(@invoice_item.unit_price)
+      expect(invoice_item_response["unit_price"]).to eq("3.0")
     end
 
     it "can find single invoice item by updated_at" do
@@ -137,7 +137,7 @@ describe "InvoiceItem API" do
       expect(response).to be_success
       expect(invoice_item_response["id"]).to eq(@invoice_item.id)
       expect(invoice_item_response["quantity"]).to eq(@invoice_item.quantity)
-      expect(invoice_item_response["unit_price"]).to eq(@invoice_item.unit_price)
+      expect(invoice_item_response["unit_price"]).to eq("3.0")
     end
 
     it "can find_all invoice items by id" do
@@ -149,7 +149,7 @@ describe "InvoiceItem API" do
       expect(response).to be_success
       expect(invoice_item["id"]).to eq (2)
       expect(invoice_item["quantity"]).to eq(@invoice_item2.quantity)
-      expect(invoice_item["unit_price"]).to eq(@invoice_item2.unit_price)
+      expect(invoice_item["unit_price"]).to eq("8.0")
       expect(invoice_item["item_id"]).to eq(@item.id)
       expect(invoice_item["invoice_id"]).to eq(@invoice.id)
     end
@@ -164,13 +164,13 @@ describe "InvoiceItem API" do
       expect(invoice_item_response.count).to eq(2)
       expect(invoice_item["id"]).to eq (3)
       expect(invoice_item["quantity"]).to eq(@invoice_item3.quantity)
-      expect(invoice_item["unit_price"]).to eq(@invoice_item3.unit_price)
+      expect(invoice_item["unit_price"]).to eq("3.0")
       expect(invoice_item["item_id"]).to eq(@item.id)
       expect(invoice_item["invoice_id"]).to eq(@invoice.id)
     end
 
     it "can find_all invoice items by unit_price" do
-      get "/api/v1/invoice_items/find_all?unit_price=#{@invoice_item3.unit_price}"
+      get "/api/v1/invoice_items/find_all?unit_price=3.0"
 
       invoice_item_response = JSON.parse(response.body)
       invoice_item = invoice_item_response.first
@@ -179,7 +179,7 @@ describe "InvoiceItem API" do
       expect(invoice_item_response.count).to eq(2)
       expect(invoice_item["id"]).to eq (1)
       expect(invoice_item["quantity"]).to eq(@invoice_item3.quantity)
-      expect(invoice_item["unit_price"]).to eq(@invoice_item.unit_price)
+      expect(invoice_item["unit_price"]).to eq("3.0")
       expect(invoice_item["item_id"]).to eq(@item.id)
       expect(invoice_item["invoice_id"]).to eq(@invoice.id)
     end
@@ -194,7 +194,7 @@ describe "InvoiceItem API" do
       expect(invoice_item_response.count).to eq(3)
       expect(invoice_item["id"]).to eq (1)
       expect(invoice_item["quantity"]).to eq(@invoice_item.quantity)
-      expect(invoice_item["unit_price"]).to eq(@invoice_item.unit_price)
+      expect(invoice_item["unit_price"]).to eq("3.0")
       expect(invoice_item["item_id"]).to eq(@item.id)
       expect(invoice_item["invoice_id"]).to eq(@invoice.id)
     end
@@ -209,7 +209,7 @@ describe "InvoiceItem API" do
       expect(invoice_item_response.count).to eq(3)
       expect(invoice_item["id"]).to eq (1)
       expect(invoice_item["quantity"]).to eq(@invoice_item.quantity)
-      expect(invoice_item["unit_price"]).to eq(@invoice_item.unit_price)
+      expect(invoice_item["unit_price"]).to eq("3.0")
       expect(invoice_item["item_id"]).to eq(@item.id)
       expect(invoice_item["invoice_id"]).to eq(@invoice.id)
     end
@@ -224,7 +224,7 @@ describe "InvoiceItem API" do
       expect(invoice_item_response.count).to eq(3)
       expect(invoice_item["id"]).to eq (1)
       expect(invoice_item["quantity"]).to eq(@invoice_item.quantity)
-      expect(invoice_item["unit_price"]).to eq(@invoice_item.unit_price)
+      expect(invoice_item["unit_price"]).to eq("3.0")
       expect(invoice_item["item_id"]).to eq(@item.id)
       expect(invoice_item["invoice_id"]).to eq(@invoice.id)
     end
@@ -239,7 +239,7 @@ describe "InvoiceItem API" do
       expect(invoice_item_response.count).to eq(3)
       expect(invoice_item["id"]).to eq (1)
       expect(invoice_item["quantity"]).to eq(@invoice_item.quantity)
-      expect(invoice_item["unit_price"]).to eq(@invoice_item.unit_price)
+      expect(invoice_item["unit_price"]).to eq("3.0")
       expect(invoice_item["item_id"]).to eq(@item.id)
       expect(invoice_item["invoice_id"]).to eq(@invoice.id)
     end

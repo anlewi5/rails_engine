@@ -24,7 +24,7 @@ describe "Invoice API" do
     end
 
     it "can show single invoice" do
-      invoice = create(:invoice, customer: customer, merchant: merchant)
+      invoice = create(:invoice, customer_id: customer.id, merchant_id: merchant.id)
 
       get "/api/v1/invoices/#{invoice.id}"
 
@@ -42,12 +42,16 @@ describe "Invoice API" do
     before(:each) do
       @customer = create(:customer)
       @merchant = create(:merchant)
-      @invoice = Invoice.create!(customer: @customer, merchant: @merchant,
-                                status: "shipped", created_at: "2012-03-06T16:54:31",
-                                updated_at: "2012-03-06T16:54:31")
-      @invoice2 = Invoice.create!(customer: @customer, merchant: @merchant,
-                                status: "shipped", created_at: "2012-03-06T16:54:31",
-                                updated_at: "2012-03-06T16:54:31")
+      @invoice  = Invoice.create!(customer: @customer,
+                                  merchant: @merchant,
+                                  status: "shipped",
+                                  created_at: "2012-03-06T16:54:31",
+                                  updated_at: "2012-03-06T16:54:31")
+      @invoice2 = Invoice.create!(customer: @customer,
+                                  merchant: @merchant,
+                                  status: "shipped",
+                                  created_at: "2012-03-06T16:54:31",
+                                  updated_at: "2012-03-06T16:54:31")
     end
 
     it "can find single invoice by id" do
@@ -65,6 +69,7 @@ describe "Invoice API" do
       invoice_response = JSON.parse(response.body)
 
       expect(response).to be_success
+
       expect(invoice_response["status"]).to eq("shipped")
     end
 

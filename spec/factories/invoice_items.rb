@@ -7,5 +7,6 @@ FactoryBot.define do
       Faker::Commerce.price
     end
     invoice
+    item
   end
 end

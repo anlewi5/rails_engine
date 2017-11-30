@@ -141,16 +141,18 @@ describe "Merchants API" do
       invoice1 = create(:invoice, merchant_id: merchant.id)
       invoice2 = create(:invoice, merchant_id: merchant.id)
       invoice_item1 = create(:invoice_item, invoice_id: invoice1.id, quantity: 2,
-                            price: 5)
+                            unit_price: 5)
       invoice_item2 = create(:invoice_item, invoice_id: invoice2.id, quantity: 3,
-                            price: 4)
+                            unit_price: 4)
+      transaction1 = create(:transaction, invoice_id: invoice1.id)
+      transaction2 = create(:transaction, invoice_id: invoice2.id)
 
       get "/api/v1/merchants/#{merchant.id}/revenue"
 
       merchant_response = JSON.parse(response.body)
 
       expect(response).to be_success
-      expect(merchant.response["total_revenue"]).to eq 22
+      expect(merchant_response["total_revenue"]).to eq "22.00"
     end
   end
 end

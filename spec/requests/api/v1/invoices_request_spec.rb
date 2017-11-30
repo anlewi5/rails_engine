@@ -201,45 +201,52 @@ describe "Invoice find, find all, and random" do
   end
 
   describe "relationship endpoints" do
-    subject { get "/api/v1/invoices/#{invoice_id}/#{relation}" }
-    let(:invoice_response) { JSON.parse(response.body)}
-    let(:invoice_id) { 1 }
+    subject { get "/api/v1/invoices/#{invoice.id}/#{relation}" }
+    let(:invoice_response) { JSON.parse(response.body) }
+
+    let(:customer)     { create(:customer) }
+    let(:merchant)     { create(:merchant) }
+    let(:invoice)      { create(:invoice, merchant: merchant, customer: customer) }
+    let(:item)         { create(:item) }
+    let(:invoice_item) { create(:invoice_item, invoice: invoice, item: item) }
+    let(:transaction)  { create(:transaction, invoice: invoice) }
 
     shared_examples_for 'a response that finds x for an invoice' do
       it "finds the correct x" do
         subject
         expect(response).to be_success
+        expect(invoice_response).to have_key :key
       end
     end
 
     context "where x is merchants" do
       let(:relation) { "merchant" }
+      let(:key)      { "merchant" }
       it_behaves_like 'a response that finds x for an invoice'
-
     end
 
     context "where x is customers" do
       let(:relation) { "customer" }
+      let(:key)      { "customer" }
       it_behaves_like 'a response that finds x for an invoice'
-
     end
 
     context "where x is transactions" do
       let(:relation) { "transactions" }
+      let(:key)      { "transactions" }
       it_behaves_like 'a response that finds x for an invoice'
-
     end
 
     context "where x is items" do
       let(:relation) { "items" }
+      let(:key)      { "items" }
       it_behaves_like 'a response that finds x for an invoice'
-
     end
 
     context "where x is invoice_items" do
       let(:relation) { "invoice_items" }
+      let(:key)      { "invoice_items" }
       it_behaves_like 'a response that finds x for an invoice'
-
     end
   end
 end

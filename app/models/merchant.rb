@@ -35,7 +35,7 @@ class Merchant < ApplicationRecord
   def self.revenue(params)
     case
     when params[:date]
-      Merchant.merchant_revenue_by_invoice_date(params[:merchant_id], params[:date])
+      Merchant.merchant_revenue_by_invoice_date_response(params[:merchant_id], params[:date])
     when params[:merchant_id]
       Merchant.single_merchant_revenue_response(params[:merchant_id])
     end
@@ -65,5 +65,10 @@ class Merchant < ApplicationRecord
     .merge(Transaction.unscoped.successful)
     .first
     .revenue
+  end
+
+  def self.merchant_revenue_by_invoice_date_response(merchant_id, invoice_date)
+    money = (merchant_revenue_by_invoice_date(merchant_id, invoice_date) / 100.0).to_s
+    { revenue: money }
   end
 end

@@ -32,6 +32,15 @@ class Merchant < ApplicationRecord
     end
   end
 
+  def self.revenue(params)
+    case
+    when params[:date]
+      Merchant.merchant_revenue_by_invoice_date(params[:merchant_id], params[:date])
+    when params[:merchant_id]
+      Merchant.single_merchant_revenue_response(params[:merchant_id])
+    end
+  end
+
   def self.single_merchant_revenue(merchant_id)
     select("merchants.id, sum(invoice_items.quantity * invoice_items.unit_price) as revenue")
     .joins(invoices: [:transactions, :invoice_items])
@@ -45,5 +54,16 @@ class Merchant < ApplicationRecord
   def self.single_merchant_revenue_response(merchant_id)
     money = (single_merchant_revenue(merchant_id) / 100.0).to_s
     { revenue: money }
+  end
+
+  def self.merchant_revenue_by_invoice_date(merchant_id, invoice_date)
+    select("merchants.id, sum(invoice_items.quantity * invoice_items.unit_price) as revenue")
+    .joins(invoices: [:transactions, :invoice_items])
+    .group("merchants.id")
+    .having("merchants.id = ?", merchant_id)
+    .where("invoices.created_at = ?", invoice_date)
+    .merge(Transaction.unscoped.successful)
+    .first
+    .revenue
   end
 end

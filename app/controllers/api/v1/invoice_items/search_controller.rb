@@ -6,5 +6,4 @@ class Api::V1::InvoiceItems::SearchController < ApplicationController
   def show
     render json: InvoiceItem.search(params)
   end
-
 end

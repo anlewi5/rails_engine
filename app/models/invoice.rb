@@ -8,6 +8,7 @@ class Invoice < ApplicationRecord
   default_scope { order(:id) }
 
   def self.search(params)
+    
     case
       when params["id"]
         Invoice.find_by(id: params["id"].to_i)

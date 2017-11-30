@@ -166,12 +166,12 @@ describe "Merchants API" do
       transaction1 = create(:transaction, invoice_id: invoice1.id)
       transaction2 = create(:transaction, invoice_id: invoice2.id)
 
-      get "/api/v1/merchants/#{merchant.id}/revenue?date=x"
+      get "/api/v1/merchants/#{merchant.id}/revenue?date=2012-03-16 11:55:05"
 
       merchant_response = JSON.parse(response.body)
 
       expect(response).to be_success
-      expect(merchant_response["2012-03-16 11:55:05"]).to eq "10.0"
+      expect(merchant_response["revenue"]).to eq "10.0"
     end
   end
 end

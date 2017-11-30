@@ -217,7 +217,7 @@ describe "Invoice find, find all, and random" do
       it "finds the correct x" do
         subject
         expect(response).to be_success
-        expect(invoice_response).to have_key("id")
+        expect(invoice_response).to have_key "id"
       end
     end
 
@@ -227,6 +227,7 @@ describe "Invoice find, find all, and random" do
       it "finds the correct x-es" do
         subject
         expect(response).to be_success
+        expect(invoice_response).to be_an Array
       end
     end
 

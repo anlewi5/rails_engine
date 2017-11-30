@@ -5,10 +5,10 @@ class Invoice < ApplicationRecord
   has_many   :invoice_items
   has_many   :items, through: :invoice_items
 
-  default_scope { order(:id) }
+  # default_scope { order(:id) }
 
   def self.search(params)
-    
+
     case
       when params["id"]
         Invoice.find_by(id: params["id"].to_i)

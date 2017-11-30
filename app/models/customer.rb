@@ -1,8 +1,9 @@
 class Customer < ApplicationRecord
   has_many :invoices
+  has_many :merchants, through: :invoices
 
   default_scope { order(:id) }
-  
+
   def self.search(params)
     case
       when params["id"]

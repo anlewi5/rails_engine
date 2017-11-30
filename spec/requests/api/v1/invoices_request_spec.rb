@@ -199,4 +199,47 @@ describe "Invoice find, find all, and random" do
     expect(invoice_response).to have_key("customer_id")
     expect(invoice_response).to have_key("merchant_id")
   end
+
+  describe "relationship endpoints" do
+    subject { get "/api/v1/invoices/#{invoice_id}/#{relation}" }
+    let(:invoice_response) { JSON.parse(response.body)}
+    let(:invoice_id) { 1 }
+
+    shared_examples_for 'a response that finds x for an invoice' do
+      it "finds the correct x" do
+        subject
+        expect(response).to be_success
+      end
+    end
+
+    context "where x is merchants" do
+      let(:relation) { "merchant" }
+      it_behaves_like 'a response that finds x for an invoice'
+
+    end
+
+    context "where x is customers" do
+      let(:relation) { "customer" }
+      it_behaves_like 'a response that finds x for an invoice'
+
+    end
+
+    context "where x is transactions" do
+      let(:relation) { "transactions" }
+      it_behaves_like 'a response that finds x for an invoice'
+
+    end
+
+    context "where x is items" do
+      let(:relation) { "items" }
+      it_behaves_like 'a response that finds x for an invoice'
+
+    end
+
+    context "where x is invoice_items" do
+      let(:relation) { "invoice_items" }
+      it_behaves_like 'a response that finds x for an invoice'
+
+    end
+  end
 end

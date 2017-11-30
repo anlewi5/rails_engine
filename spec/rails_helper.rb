@@ -51,4 +51,8 @@ if ENV['CIRCLE_ARTIFACTS']
   SimpleCov.coverage_dir(dir)
 end
 
-SimpleCov.start 'rails'
+SimpleCov.start 'rails' do
+  add_filter '/app/channels/*'
+  add_filter '/app/jobs/*'
+  add_filter '/app/mailers/*'
+end

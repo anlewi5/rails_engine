@@ -124,4 +124,12 @@ class Merchant < ApplicationRecord
     .order("sum DESC")
     .limit(quantity)
   end
+
+  def self.sql(merchant_id)
+    "SELECT DISTINCT customers.*, transactions.result, merchants.* FROM customers INNER JOIN invoices ON invoices.customer_id = customers.id INNER JOIN transactions ON transactions.invoice_id = invoices.id INNER JOIN merchants ON invoices.merchant_id = merchants.id WHERE transactions.result = 'failed' AND merchants.id = #{merchant_id} EXCEPT SELECT DISTINCT customers.*, transactions.result, merchants.* FROM customers INNER JOIN invoices ON invoices.customer_id = customers.id INNER JOIN transactions ON transactions.invoice_id = invoices.id INNER JOIN merchants ON invoices.merchant_id = merchants.id WHERE transactions.result = 'success' AND merchants.id = #{merchant_id}"
+  end
+
+  def self.pending_customers(merchant_id)
+    find_by_sql(sql(merchant_id))
+  end
 end

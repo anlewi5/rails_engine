@@ -24,7 +24,7 @@ Rails.application.routes.draw do
 
       resources :invoice_items, only: [:index, :show] do
         resources :invoice, only: [:index], to: 'invoice_items/invoice#index'
-        resources :item, only: [:index], to: 'invoice_items/invoice#index'
+        resources :item, only: [:index], to: 'invoice_items/item#index'
       end
 
       namespace :items do

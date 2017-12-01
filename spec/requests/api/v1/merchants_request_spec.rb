@@ -309,5 +309,38 @@ describe "Merchants API" do
       expect(merchant_response.first).to have_key "id"
       expect(merchant_response.first).to have_key "name"
     end
+
+    it "returns the pending_customers" do
+      customer      = create(:customer)
+      customer2     = create(:customer)
+      merchant1     = create(:merchant)
+      merchant2     = create(:merchant)
+      invoice1      = create(:invoice,
+                              merchant_id: merchant1.id,
+                              customer: customer)
+      invoice2      = create(:invoice,
+                              merchant_id: merchant2.id,
+                              customer: customer2)
+      invoice_item1 = create(:invoice_item, invoice_id: invoice1.id)
+      invoice_item2 = create(:invoice_item, invoice_id: invoice2.id)
+      transaction1  = create(:transaction,
+                            invoice_id: invoice1.id,
+                            result: "failed")
+      transaction2  = create(:transaction,
+                            invoice_id: invoice2.id)
+
+      get "/api/v1/merchants/#{merchant1.id}/customers_with_pending_invoices"
+
+      pending_customers_response = JSON.parse(response.body)
+      pending_customer = pending_customers_response.first
+
+      expect(response).to be_success
+      expect(pending_customers_response).to be_an Array
+      expect(pending_customers_response.count).to eq 1
+      expect(pending_customers_response.first).to have_key "id"
+      expect(pending_customers_response.first).to have_key "first_name"
+      expect(pending_customer["id"]).to eq(customer.id)
+      expect(pending_customer["first_name"]).to eq(customer.first_name)
+    end
   end
 end

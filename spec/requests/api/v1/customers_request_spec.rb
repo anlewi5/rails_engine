@@ -153,4 +153,25 @@ describe "customers API" do
       end
     end
   end
+
+  describe "business intelligence" do
+    it "returns a merchant where the customer has conducted the most successful transactions" do
+      customer      = create(:customer)
+      merchant1      = create(:merchant)
+      merchant2      = create(:merchant)
+      invoice1       = create(:invoice, merchant: merchant1, customer: customer)
+      invoice2      = create(:invoice, merchant: merchant1, customer: customer)
+      invoice3      = create(:invoice, merchant: merchant2, customer: customer)
+      transactions  = create(:transaction, invoice: invoice1)
+      transactions2 = create(:transaction, invoice: invoice2)
+
+      get "/api/v1/customers/#{customer.id}/favorite_merchant"
+
+      customer_response = JSON.parse(response.body)
+
+      expect(response).to be_success
+      expect(customer_response["id"]).to eq(merchant1.id)
+      expect(customer_response["name"]).to eq(merchant1.name)
+    end
+  end
 end

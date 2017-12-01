@@ -33,4 +33,15 @@ class Customer < ApplicationRecord
         Customer.where(updated_at: params["updated_at"].to_datetime)
     end
   end
+
+  def self.favorite_merchant(customer_id)
+    find(customer_id)
+    .merchants
+    .select("merchants.*, count(transactions)")
+    .joins(invoices: :transactions)
+    .merge(Transaction.unscoped.successful)
+    .group("merchants.id")
+    .order("count DESC")
+    .first
+  end
 end

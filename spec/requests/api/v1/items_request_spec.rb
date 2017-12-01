@@ -277,6 +277,5 @@ describe "Items API" do
       expect(most_items_response.count).to eq(1)
       expect(top_item["name"]).to eq("Camera")
     end
-
   end
 end

@@ -260,7 +260,7 @@ describe "InvoiceItem API" do
 
   describe "relationship endpoints" do
     subject { get "/api/v1/invoice_items/#{invoice_item_id}/#{relation}" }
-    let(:invoice_response) { JSON.parse(response.body) }
+    let(:invoice_item_response) { JSON.parse(response.body) }
 
     let(:customer)     { create(:customer) }
     let(:merchant)     { create(:merchant) }
@@ -270,12 +270,16 @@ describe "InvoiceItem API" do
     let(:transaction)  { create(:transaction, invoice: invoice) }
 
     shared_examples_for 'a response that finds x for an invoice_item' do
-      let(:invoice_item_id) { invoice.id }
+      let(:invoice_item_id) { invoice_item.id }
 
       it "finds the correct x" do
         subject
         expect(response).to be_success
-        expect(invoice_response).to have_key "id"
+        expect(invoice_item_response).to have_key "id"
+        expect(invoice_item_response).to have_key "status"
+        expect(invoice_item_response).to have_key "customer_id"
+        expect(invoice_item_response).to have_key "merchant_id"
+        expect(invoice_item_response).to have_key "created_at"
       end
     end
 

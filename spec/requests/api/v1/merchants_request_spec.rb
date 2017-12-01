@@ -290,22 +290,23 @@ describe "Merchants API" do
     end
 
     it "returns the top x merchants ranked by total number of items sold" do
-      merchant = create(:merchant)
-      invoice1 = create(:invoice, merchant_id: merchant.id, created_at: "2012-03-16 11:55:05")
-      invoice2 = create(:invoice, merchant_id: merchant.id, created_at: "2013-03-16 11:55:05")
-      invoice_item1 = create(:invoice_item, invoice_id: invoice1.id, quantity: 2,
-                            unit_price: 500)
-      invoice_item2 = create(:invoice_item, invoice_id: invoice2.id, quantity: 3,
-                            unit_price: 400)
+      merchant1 = create(:merchant)
+      merchant2 = create(:merchant)
+      invoice1 = create(:invoice, merchant_id: merchant1.id)
+      invoice2 = create(:invoice, merchant_id: merchant1.id)
+      invoice3 = create(:invoice, merchant_id: merchant2.id)
+      invoice4 = create(:invoice, merchant_id: merchant2.id)
+      invoice_item1 = create(:invoice_item, invoice_id: invoice1.id)
+      invoice_item2 = create(:invoice_item, invoice_id: invoice2.id)
       transaction1 = create(:transaction, invoice_id: invoice1.id)
       transaction2 = create(:transaction, invoice_id: invoice2.id)
 
-      get "/api/v1/merchants/#{merchant.id}/revenue?date=2012-03-16 11:55:05"
+      get "/api/v1/merchants/most_items?quantity=2"
 
       merchant_response = JSON.parse(response.body)
 
       expect(response).to be_success
-      expect(merchant_response["revenue"]).to eq "10.0"
+      expect(merchant_response).to be_an Array
     end
   end
 end

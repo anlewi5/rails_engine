@@ -105,4 +105,13 @@ class Merchant < ApplicationRecord
     money = (all_merchants_revenue_for_date(date)/100.0).to_s
     { total_revenue: money }
   end
+
+  def self.merchant_revenue_by_invoice_date(quantity)
+    select("items.id as items_id, merchants.id as merchant_id, invoice_items.quantity")
+    .joins(invoices: :transactions, items: :invoice_items)
+    .group("items.id").merge(Transaction.unscoped.successful)
+    .order("sum_invoice_items_quantity DESC")
+    .limit(quantity)
+    .sum("invoice_items.quantity")
+  end
 end

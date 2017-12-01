@@ -64,6 +64,8 @@ Rails.application.routes.draw do
       end
       resources :customers, only: [:index, :show] do
         get 'favorite_merchant', to: 'favorite_merchant#index'
+        resources :transactions, only: [:index, :show]
+        resources :invoices, only: [:index]
       end
 
       namespace :transactions do
@@ -76,5 +78,4 @@ Rails.application.routes.draw do
       end
     end
   end
-
 end

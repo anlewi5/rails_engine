@@ -15,6 +15,4 @@
 
 .byebug_history
 
-db/csv/*
-
 coverage

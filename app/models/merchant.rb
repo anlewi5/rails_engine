@@ -68,6 +68,17 @@ class Merchant < ApplicationRecord
     .revenue
   end
 
+  def self.merchant_revenue_by_invoice_date(merchant_id, invoice_date)
+    select("merchants.id, sum(invoice_items.quantity * invoice_items.unit_price) as revenue")
+    .joins(invoices: [:transactions, :invoice_items])
+    .group("merchants.id")
+    .having("merchants.id = ?", merchant_id)
+    .where("invoices.created_at = ?", invoice_date)
+    .merge(Transaction.unscoped.successful)
+    .first
+    .revenue
+  end
+
   def self.merchant_revenue_by_invoice_date_response(merchant_id, invoice_date)
     money = (merchant_revenue_by_invoice_date(merchant_id, invoice_date) / 100.0).to_s
     { revenue: money }
@@ -104,13 +115,6 @@ class Merchant < ApplicationRecord
   def self.format_all_merchants_revenue_for_date(date)
     money = (all_merchants_revenue_for_date(date)/100.0).to_s
     { total_revenue: money }
-  end
-
-  def self.merchant_revenue_by_invoice_date(quantity)
-    select("items.id as items_id, merchants.id as merchant_id, invoice_items.quantity")
-    .joins(invoices: :transactions, items: :invoice_items)
-    .group("items.id").merge(Transaction.unscoped.successful)
-    .order("sum_invoice_items_quantity DESC")
   end
 
   def self.merchants_selling_most_items(quantity)

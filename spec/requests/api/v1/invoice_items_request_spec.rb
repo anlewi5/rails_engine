@@ -276,10 +276,6 @@ describe "InvoiceItem API" do
         subject
         expect(response).to be_success
         expect(invoice_item_response).to have_key "id"
-        expect(invoice_item_response).to have_key "status"
-        expect(invoice_item_response).to have_key "customer_id"
-        expect(invoice_item_response).to have_key "merchant_id"
-        expect(invoice_item_response).to have_key "created_at"
       end
     end
 

@@ -71,7 +71,9 @@ Rails.application.routes.draw do
         get '/find',     to: 'search#show'
         get '/random',   to: 'search#show'
       end
-      resources :transactions, only: [:index, :show]
+      resources :transactions, only: [:index, :show] do
+        resources :invoices, only: [:index]
+      end
     end
   end
 

@@ -8,7 +8,7 @@ The purpose of this project is to use Rails and ActiveRecord to build a JSON API
 
 ## Getting Started
 
-This project uses the Ruby on Rails framework, which can be installed from [here](http://installrails.com/). 
+This project uses the Ruby on Rails framework, which can be installed from [here](http://installrails.com/).
 [Bundler](http://bundler.io/) is used to install the gems needed for this application.
 
 In order to run this appication in the development environment, perform the following in the CLI:
@@ -23,7 +23,7 @@ In order to spin-up the server, run: `rails s`
 
 ## Testing
 
-[Rspec-Rails](https://github.com/rspec/rspec-rails) is used for testing. 
+[Rspec-Rails](https://github.com/rspec/rspec-rails) is used for testing.
 [Factory_Bot](https://github.com/thoughtbot/factory_bot) is used to create test data.
 
 In order to run tests, perform the following:
@@ -39,22 +39,3 @@ In order to run tests, perform the following:
 ## Contributers
 
 Anna Lewis (@anlewi5) Dione Wilson (@dionew1)
-
-
-## Other things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions

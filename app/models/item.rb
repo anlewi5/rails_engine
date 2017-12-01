@@ -72,4 +72,9 @@ class Item < ApplicationRecord
       .order("invoice_items.quantity DESC")
       .first
   end
+
+  def self.best_day_response(item_id)
+    date = best_day(item_id).created_at
+    { best_day: date }
+  end
 end

@@ -17,7 +17,6 @@ describe "transactions API" do
       expect(transaction).to have_key("invoice_id")
       expect(transaction).to have_key("result")
       expect(transaction).to have_key("credit_card_number")
-      
       expect(transaction).not_to have_key("credit_card_expiration_date")
       expect(transaction).not_to have_key("updated_at")
       expect(transaction).not_to have_key("created_at")
@@ -199,20 +198,20 @@ describe "transactions API" do
     let!(:invoice_item) { create(:invoice_item, invoice: invoice, item: item) }
     let!(:transaction)  { create(:transaction, invoice: invoice) }
 
-    shared_examples_for 'a response that finds x for a merchant' do
+    shared_examples_for 'a response that finds x for a transaction' do
       let(:transaction_id) { transaction.id }
 
       it "finds the correct x" do
         subject
         expect(response).to be_success
-        expect(transaction_response.first).to have_key "id"
-        expect(transaction_response.first).to have_key "status"
+        expect(transaction_response).to have_key("id")
+        expect(transaction_response).to have_key("status")
       end
     end
 
     context "where x is invoice" do
       let(:relation) { "invoice" }
-      it_behaves_like 'a response that finds x for a merchant'
+      it_behaves_like 'a response that finds x for a transaction'
     end
   end
 end

@@ -185,24 +185,24 @@ describe "customers API" do
     let!(:invoice_item) { create(:invoice_item, invoice: invoice, item: item) }
     let!(:transaction)  { create(:transaction, invoice: invoice) }
 
-    shared_examples_for 'a response that finds x for a merchant' do
+    shared_examples_for 'a response that finds x for a customer' do
       let(:customer_id) { customer.id }
 
       it "finds the correct x" do
         subject
         expect(response).to be_success
-        expect(customer_response.first).to have_key "id"
+        expect(customer_response.first).to have_key("id")
       end
     end
 
     context "where x is invoices" do
       let(:relation) { "invoices" }
-      it_behaves_like 'a response that finds x for a merchant'
+      it_behaves_like 'a response that finds x for a customer'
     end
 
     context "where x is transactions" do
       let(:relation) { "transactions" }
-      it_behaves_like 'a response that finds x for a merchant'
+      it_behaves_like 'a response that finds x for a customer'
     end
   end
 end

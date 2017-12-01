@@ -52,20 +52,20 @@ Rails.application.routes.draw do
         get 'customers_with_pending_invoices', to: 'pending#index'
         get 'favorite_customer', to: 'favorite_customer#index'
         resources :revenue, only: [:index]
-        resources :items, only: [:index]
-        resources :invoices, only: [:index]
+        get 'items', to: 'items/search#index'
+        get 'invoices', to: 'invoices/search#index'
       end
 
 
       namespace :customers do
-        get '/find_all', to: 'search#index'
-        get '/find',     to: 'search#show'
-        get '/random',   to: 'search#show'
+        get '/find_all',    to: 'search#index'
+        get '/find',        to: 'search#show'
+        get '/random',      to: 'search#show'
       end
       resources :customers, only: [:index, :show] do
         get 'favorite_merchant', to: 'favorite_merchant#index'
-        resources :transactions, only: [:index, :show]
-        resources :invoices, only: [:index]
+        get 'invoices', to: 'invoices/search#index'
+        get 'transactions', to: 'customer_transactions#index'
       end
 
       namespace :transactions do
@@ -74,7 +74,7 @@ Rails.application.routes.draw do
         get '/random',   to: 'search#show'
       end
       resources :transactions, only: [:index, :show] do
-        get 'invoice', to: 'invoices#index'
+        get 'invoice', to: 'transaction_invoice#index'
       end
     end
   end

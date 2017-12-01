@@ -277,5 +277,21 @@ describe "Items API" do
       expect(most_items_response.count).to eq(1)
       expect(top_item["name"]).to eq("Camera")
     end
+
+    it "returns the top x items ranked by total revenue generated" do
+      get '/api/v1/items/most_items?quantity=2'
+
+      most_items_response = JSON.parse(response.body)
+      top_item = most_items_response.first
+
+      expect(response).to be_success
+      expect(most_items_response).to be_an Array
+      expect(most_items_response.count).to eq 2
+      expect(top_item).to have_key "id"
+      expect(top_item).to have_key "name"
+      expect(top_item).to have_key "description"
+      expect(top_item).to have_key "unit_price"
+      expect(top_item["name"]).to eq("Camera")
+    end
   end
 end

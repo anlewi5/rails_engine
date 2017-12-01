@@ -43,7 +43,7 @@ describe "Items API" do
   end
 
   describe "Item find, find all, and random" do
-    let(:merchant) {create(:merchant)}
+    let!(:merchant)  {create(:merchant)}
     let!(:item)     {create(:item,
                             name: "Camera",
                             unit_price: 300,
@@ -106,8 +106,8 @@ describe "Items API" do
       item_response = JSON.parse(response.body)
 
       expect(response).to be_success
-      expect(item_response["name"]).to eq(item.name)
-      expect(item_response["description"]).to eq(item.description)
+      expect(item_response["name"]).to eq(item2.name)
+      expect(item_response["description"]).to eq(item2.description)
       expect(item_response["unit_price"]).to eq("3.0")
     end
 
@@ -231,22 +231,40 @@ describe "Items API" do
   end
 
   describe 'business intelligence' do
-    let!(:invoice)        {create(:invoice)}
-    let!(:invoice_items)  {create(:invoice_item, quantity: 3, item: item)}
-    let!(:invoice_items1) {create(:invoice_item, quantity: 6, item: item)}
-    let!(:invoice_items2) {create(:invoice_item, quantity: 5, item: item2)}
-    let!(:invoice_items3) {create(:invoice_item, quantity: 1, item: item3)}
-    let!(:transaction)    {create(:transaction)}
+    let!(:merchant)       {create(:merchant)}
+    let!(:invoice)        {create(:invoice,
+                                  merchant: merchant)}
+    let!(:invoice_items)  {create(:invoice_item,
+                                  quantity: 3,
+                                  item: item,
+                                  invoice: invoice)}
+    let!(:invoice_items1) {create(:invoice_item,
+                                  quantity: 6,
+                                  item: item,
+                                  invoice: invoice)}
+    let!(:invoice_items2) {create(:invoice_item,
+                                  quantity: 5,
+                                  item: item2,
+                                  invoice: invoice)}
+    let!(:invoice_items3) {create(:invoice_item,
+                                  quantity: 1,
+                                  item: item3,
+                                  invoice: invoice)}
+
+    let!(:transaction)    {create(:transaction, invoice: invoice)}
+
     let!(:item)           {create(:item,
                             name: "Camera",
                             unit_price: 140000,
                             created_at: "2012-03-27T14:54:05.000Z",
-                            updated_at: "2012-03-27T14:54:05.000Z")}
+                            updated_at: "2012-03-27T14:54:05.000Z",
+                            merchant: merchant)}
     let!(:item2)          {create(:item,
                             name: "Shoes",
                             unit_price: 20000,
                             created_at: "2012-03-27T14:54:05.000Z",
-                            updated_at: "2012-03-27T14:54:05.000Z")}
+                            updated_at: "2012-03-27T14:54:05.000Z",
+                            merchant: merchant)}
     let!(:item3)          {create(:item)}
 
     it 'can return most_items ranked by total sold quantity=1' do

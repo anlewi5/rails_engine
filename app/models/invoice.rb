@@ -8,7 +8,7 @@ class Invoice < ApplicationRecord
   def self.search(params)
 
     case
-    when params["id"]
+      when params["id"]
         Invoice.find_by(id: params["id"].to_i)
       when params["status"]
         Invoice.find_by(status: params["status"])

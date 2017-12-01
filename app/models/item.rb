@@ -60,4 +60,14 @@ class Item < ApplicationRecord
     .order('total DESC')
     .limit(quantity)
   end
+
+  def self.best_day(item_id)
+      find(item_id)
+      .invoices
+      .where(invoice_items: { item_id: item_id })
+      .joins(invoice_items: [invoice: :transactions])
+      .merge(Transaction.unscoped.successful)
+      .order("invoice_items.quantity DESC")
+      .first
+  end
 end

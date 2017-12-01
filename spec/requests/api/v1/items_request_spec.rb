@@ -233,7 +233,8 @@ describe "Items API" do
   describe 'business intelligence' do
     let!(:merchant)       {create(:merchant)}
     let!(:invoice)        {create(:invoice,
-                                  merchant: merchant)}
+                                  merchant: merchant,
+                                  created_at: "2012-03-27T14:54:05.000Z")}
     let!(:invoice_items)  {create(:invoice_item,
                                   quantity: 3,
                                   item: item,
@@ -292,6 +293,15 @@ describe "Items API" do
       expect(top_item).to have_key "description"
       expect(top_item).to have_key "unit_price"
       expect(top_item["name"]).to eq("Camera")
+    end
+
+    it "returns the date with the most sales for the given item using the invoice date" do
+      get "/api/v1/items/#{item.id}/best_day"
+
+      item_response = JSON.parse(response.body)
+      
+      expect(response).to be_success
+      expect(item_response["created_at"]).to eq("2012-03-27T14:54:05.000Z")
     end
   end
 end

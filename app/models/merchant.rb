@@ -3,7 +3,7 @@ class Merchant < ApplicationRecord
   has_many :items
   has_many :customers, through: :invoices
 
-  default_scope { order(:id) }
+  # default_scope { order(:id) }
 
   def self.search(params)
     case
@@ -92,5 +92,17 @@ class Merchant < ApplicationRecord
     .order('revenue DESC')
     .merge(Transaction.unscoped.successful)
     .limit(quantity)
+  end
+
+  def self.all_merchants_revenue_for_date(date)
+    joins(invoices: [:transactions, :invoice_items])
+    .where("invoices.created_at = ?", date.to_datetime)
+    .merge(Transaction.unscoped.successful)
+    .sum("invoice_items.quantity * invoice_items.unit_price")
+  end
+
+  def self.format_all_merchants_revenue_for_date(date)
+    money = (all_merchants_revenue_for_date(date)/100.0).to_s
+    { total_revenue: money }
   end
 end

@@ -230,6 +230,32 @@ describe "Items API" do
     end
   end
 
+  describe "relationship endpoints" do
+
+    let!(:customer)     { create(:customer) }
+    let!(:merchant)     { create(:merchant) }
+    let!(:invoice)      { create(:invoice, merchant: merchant, customer: customer) }
+    let!(:item)         { create(:item) }
+    let!(:invoice_item) { create(:invoice_item, invoice: invoice, item: item) }
+    let!(:transaction)  { create(:transaction, invoice: invoice) }
+
+    it "returns the associated merchant" do
+      get "/api/v1/items/#{item.id}/merchant"
+
+      item_response = JSON.parse(response.body)
+
+      expect(item_response).to have_key "id"
+    end
+
+    it "returns a collection of associated invoice items" do
+      get "/api/v1/items/#{item.id}/invoice_items"
+
+      item_response = JSON.parse(response.body)
+
+      expect(item_response).to have_key "id"
+    end
+  end
+
   describe 'business intelligence' do
     let!(:merchant)       {create(:merchant)}
     let!(:invoice)        {create(:invoice,
@@ -299,7 +325,7 @@ describe "Items API" do
       get "/api/v1/items/#{item.id}/best_day"
 
       item_response = JSON.parse(response.body)
-      
+
       expect(response).to be_success
       expect(item_response["created_at"]).to eq("2012-03-27T14:54:05.000Z")
     end

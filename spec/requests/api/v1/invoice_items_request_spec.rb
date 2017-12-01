@@ -257,4 +257,36 @@ describe "InvoiceItem API" do
       expect(invoice_item_response).to have_key("invoice_id")
     end
   end
+
+  describe "relationship endpoints" do
+    subject { get "/api/v1/invoice_items/#{invoice_item_id}/#{relation}" }
+    let(:invoice_response) { JSON.parse(response.body) }
+
+    let(:customer)     { create(:customer) }
+    let(:merchant)     { create(:merchant) }
+    let(:invoice)      { create(:invoice, merchant: merchant, customer: customer) }
+    let(:item)         { create(:item) }
+    let(:invoice_item) { create(:invoice_item, invoice: invoice, item: item) }
+    let(:transaction)  { create(:transaction, invoice: invoice) }
+
+    shared_examples_for 'a response that finds x for an invoice_item' do
+      let(:invoice_item_id) { invoice.id }
+
+      it "finds the correct x" do
+        subject
+        expect(response).to be_success
+        expect(invoice_response).to have_key "id"
+      end
+    end
+
+    context "where x is invoice" do
+      let(:relation) { "invoice" }
+      it_behaves_like 'a response that finds x for an invoice_item'
+    end
+
+    context "where x is item" do
+      let(:relation) { "item" }
+      it_behaves_like 'a response that finds x for an invoice_item'
+    end
+  end
 end

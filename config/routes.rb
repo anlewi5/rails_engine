@@ -52,6 +52,8 @@ Rails.application.routes.draw do
         get 'customers_with_pending_invoices', to: 'pending#index'
         get 'favorite_customer', to: 'favorite_customer#index'
         resources :revenue, only: [:index]
+        resources :items, only: [:index]
+        resources :invoices, only: [:index]
       end
 
 

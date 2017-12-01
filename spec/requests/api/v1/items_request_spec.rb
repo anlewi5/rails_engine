@@ -266,7 +266,7 @@ describe "Items API" do
     let!(:merchant)       {create(:merchant)}
     let!(:invoice)        {create(:invoice,
                                   merchant: merchant,
-                                  created_at: "2012-03-27T14:54:05.000Z")}
+                                  created_at: "2013-03-27T14:54:05.000Z")}
     let!(:invoice_items)  {create(:invoice_item,
                                   quantity: 3,
                                   item: item,
@@ -331,9 +331,9 @@ describe "Items API" do
       get "/api/v1/items/#{item.id}/best_day"
 
       item_response = JSON.parse(response.body)
-      
+
       expect(response).to be_success
-      expect(item_response["best_day"]).to eq("2012-03-27T14:54:05.000Z")
+      expect(item_response["best_day"]).to eq("2013-03-27T14:54:05.000Z")
     end
   end
 end

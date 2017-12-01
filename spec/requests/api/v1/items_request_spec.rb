@@ -329,7 +329,6 @@ describe "Items API" do
 
     it "returns the date with the most sales for the given item using the invoice date" do
       get "/api/v1/items/#{item.id}/best_day"
-
       item_response = JSON.parse(response.body)
 
       expect(response).to be_success

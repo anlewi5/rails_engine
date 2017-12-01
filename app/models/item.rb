@@ -3,7 +3,7 @@ class Item < ApplicationRecord
   has_many   :invoice_items
   has_many   :invoices, through: :invoice_items
 
-  default_scope { order(:id) }
+  # default_scope { order(:id) }
 
   def self.search(params)
     case
@@ -43,5 +43,14 @@ class Item < ApplicationRecord
       when params["updated_at"]
         Item.where(updated_at: params["updated_at"].to_datetime)
     end
+  end
+
+  def self.most_items(quantity)
+    select('items.*, sum(invoice_items.quantity) as total')
+    .joins(invoice_items: [invoice: :transactions])
+    .merge(Transaction.unscoped.successful)
+    .group('items.id')
+    .order('total DESC')
+    .limit(quantity)
   end
 end

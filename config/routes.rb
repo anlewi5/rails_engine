@@ -74,7 +74,7 @@ Rails.application.routes.draw do
         get '/random',   to: 'search#show'
       end
       resources :transactions, only: [:index, :show] do
-        resources :invoices, only: [:index]
+        get 'invoice', to: 'invoices#index'
       end
     end
   end

@@ -106,8 +106,8 @@ describe "Items API" do
       item_response = JSON.parse(response.body)
 
       expect(response).to be_success
-      expect(item_response["name"]).to eq(item2.name)
-      expect(item_response["description"]).to eq(item2.description)
+      expect(item_response["name"]).to eq(item.name)
+      expect(item_response["description"]).to eq(item.description)
       expect(item_response["unit_price"]).to eq("3.0")
     end
 

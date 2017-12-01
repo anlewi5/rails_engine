@@ -174,4 +174,35 @@ describe "customers API" do
       expect(customer_response["name"]).to eq(merchant1.name)
     end
   end
+  describe "relationship endpoints" do
+    subject { get "/api/v1/customers/#{customer.id}/#{relation}" }
+    let(:customer_response) { JSON.parse(response.body) }
+
+    let!(:customer)     { create(:customer) }
+    let!(:merchant)     { create(:merchant) }
+    let!(:invoice)      { create(:invoice, merchant: merchant, customer: customer) }
+    let!(:item)         { create(:item, merchant: merchant) }
+    let!(:invoice_item) { create(:invoice_item, invoice: invoice, item: item) }
+    let!(:transaction)  { create(:transaction, invoice: invoice) }
+
+    shared_examples_for 'a response that finds x for a merchant' do
+      let(:customer_id) { customer.id }
+
+      it "finds the correct x" do
+        subject
+        expect(response).to be_success
+        expect(customer_response.first).to have_key "id"
+      end
+    end
+
+    context "where x is invoices" do
+      let(:relation) { "invoices" }
+      it_behaves_like 'a response that finds x for a merchant'
+    end
+
+    context "where x is transactions" do
+      let(:relation) { "transactions" }
+      it_behaves_like 'a response that finds x for a merchant'
+    end
+  end
 end

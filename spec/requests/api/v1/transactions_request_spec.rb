@@ -188,4 +188,31 @@ describe "transactions API" do
       end
     end
   end
+  describe "relationship endpoints" do
+    subject { get "/api/v1/transactions/#{transaction.id}/#{relation}" }
+    let(:transaction_response) { JSON.parse(response.body) }
+
+    let!(:customer)     { create(:customer) }
+    let!(:merchant)     { create(:merchant) }
+    let!(:invoice)      { create(:invoice, merchant: merchant, customer: customer) }
+    let!(:item)         { create(:item, merchant: merchant) }
+    let!(:invoice_item) { create(:invoice_item, invoice: invoice, item: item) }
+    let!(:transaction)  { create(:transaction, invoice: invoice) }
+
+    shared_examples_for 'a response that finds x for a merchant' do
+      let(:transaction_id) { transaction.id }
+
+      it "finds the correct x" do
+        subject
+        expect(response).to be_success
+        expect(transaction_response.first).to have_key "id"
+        expect(transaction_response.first).to have_key "status"
+      end
+    end
+
+    context "where x is invoice" do
+      let(:relation) { "invoice" }
+      it_behaves_like 'a response that finds x for a merchant'
+    end
+  end
 end

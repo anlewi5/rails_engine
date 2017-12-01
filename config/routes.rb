@@ -22,7 +22,10 @@ Rails.application.routes.draw do
         get '/random',   to: 'search#show'
       end
 
-      resources :invoice_items, only: [:index, :show]
+      resources :invoice_items, only: [:index, :show] do
+        resources :invoice, only: [:index], to: 'invoice_items/invoice#index'
+        resources :item, only: [:index], to: 'invoice_items/invoice#index'
+      end
 
       namespace :items do
         get '/find_all',    to: 'search#index'
@@ -32,6 +35,8 @@ Rails.application.routes.draw do
         get '/most_items',   to: 'most_items#index'
       end
       resources :items,  only: [:index, :show] do
+        resources :invoice_items, only: [:index], to: 'items/invoice_items#index'
+        resources :merchant, only: [:index], to: 'items/merchant#index'
         get 'best_day', to: 'best_day#index'
       end
 

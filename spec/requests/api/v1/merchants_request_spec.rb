@@ -310,7 +310,7 @@ describe "Merchants API" do
       expect(merchant_response.first).to have_key "name"
     end
 
-    it "returns the pending_customers" do
+    xit "returns the pending_customers" do
       customer      = create(:customer)
       customer2     = create(:customer)
       merchant1     = create(:merchant)
@@ -341,6 +341,38 @@ describe "Merchants API" do
       expect(pending_customers_response.first).to have_key "first_name"
       expect(pending_customer["id"]).to eq(customer.id)
       expect(pending_customer["first_name"]).to eq(customer.first_name)
+    end
+  end
+
+  describe "relationship endpoints" do
+    subject { get "/api/v1/merchants/#{merchant.id}/#{relation}" }
+    let(:merchant_response) { JSON.parse(response.body) }
+
+    let!(:customer)     { create(:customer) }
+    let!(:merchant)     { create(:merchant) }
+    let!(:invoice)      { create(:invoice, merchant: merchant, customer: customer) }
+    let!(:item)         { create(:item, merchant: merchant) }
+    let!(:invoice_item) { create(:invoice_item, invoice: invoice, item: item) }
+    let!(:transaction)  { create(:transaction, invoice: invoice) }
+
+    shared_examples_for 'a response that finds x for a merchant' do
+      let(:merchant_id) { merchant.id }
+
+      it "finds the correct x" do
+        subject
+        expect(response).to be_success
+        expect(merchant_response.first).to have_key "id"
+      end
+    end
+
+    context "where x is invoices" do
+      let(:relation) { "invoices" }
+      it_behaves_like 'a response that finds x for a merchant'
+    end
+
+    context "where x is items" do
+      let(:relation) { "items" }
+      it_behaves_like 'a response that finds x for a merchant'
     end
   end
 end

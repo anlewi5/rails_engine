@@ -25,9 +25,10 @@ Rails.application.routes.draw do
       resources :invoice_items, only: [:index, :show]
 
       namespace :items do
-        get '/find_all', to: 'search#index'
-        get '/find',     to: 'search#show'
-        get '/random',   to: 'search#show'
+        get '/find_all',    to: 'search#index'
+        get '/find',        to: 'search#show'
+        get '/random',      to: 'search#show'
+        get '/most_items',   to: 'most_items#index'
       end
       resources :items,  only: [:index, :show]
 

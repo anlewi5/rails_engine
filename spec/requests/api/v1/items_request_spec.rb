@@ -245,6 +245,7 @@ describe "Items API" do
       item_response = JSON.parse(response.body)
 
       expect(item_response).to have_key "id"
+      expect(item_response).to have_key "name"
     end
 
     it "returns a collection of associated invoice items" do
@@ -252,7 +253,12 @@ describe "Items API" do
 
       item_response = JSON.parse(response.body)
 
-      expect(item_response).to have_key "id"
+      expect(item_response).to be_an Array
+      expect(item_response.first).to have_key "id"
+      expect(item_response.first).to have_key "quantity"
+      expect(item_response.first).to have_key "unit_price"
+      expect(item_response.first).to have_key "invoice_id"
+      expect(item_response.first).to have_key "item_id"
     end
   end
 

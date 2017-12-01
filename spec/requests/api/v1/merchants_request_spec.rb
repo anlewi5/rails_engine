@@ -293,9 +293,7 @@ describe "Merchants API" do
       merchant1 = create(:merchant)
       merchant2 = create(:merchant)
       invoice1 = create(:invoice, merchant_id: merchant1.id)
-      invoice2 = create(:invoice, merchant_id: merchant1.id)
-      invoice3 = create(:invoice, merchant_id: merchant2.id)
-      invoice4 = create(:invoice, merchant_id: merchant2.id)
+      invoice2 = create(:invoice, merchant_id: merchant2.id)
       invoice_item1 = create(:invoice_item, invoice_id: invoice1.id)
       invoice_item2 = create(:invoice_item, invoice_id: invoice2.id)
       transaction1 = create(:transaction, invoice_id: invoice1.id)
@@ -307,6 +305,9 @@ describe "Merchants API" do
 
       expect(response).to be_success
       expect(merchant_response).to be_an Array
+      expect(merchant_response.count).to eq 2
+      expect(merchant_response.first).to have_key "id"
+      expect(merchant_response.first).to have_key "name"
     end
   end
 end

@@ -16,8 +16,8 @@ describe "transactions API" do
       expect(transaction).to have_key("id")
       expect(transaction).to have_key("invoice_id")
       expect(transaction).to have_key("result")
-
-      expect(transaction).not_to have_key("credit_card_number")
+      expect(transaction).to have_key("credit_card_number")
+      
       expect(transaction).not_to have_key("credit_card_expiration_date")
       expect(transaction).not_to have_key("updated_at")
       expect(transaction).not_to have_key("created_at")

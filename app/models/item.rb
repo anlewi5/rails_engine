@@ -51,4 +51,13 @@ class Item < ApplicationRecord
     .order('total DESC')
     .limit(quantity)
   end
+
+  def self.most_revenue(quantity)
+    select('items.*, sum(invoice_items.quantity invoice_items.unit_price) as total')
+    .joins(invoice_items: [invoice: :transactions])
+    .merge(Transaction.unscoped.successful)
+    .group('items.id')
+    .order('total DESC')
+    .limit(quantity)
+  end
 end
